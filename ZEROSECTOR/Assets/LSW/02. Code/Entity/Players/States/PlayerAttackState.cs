@@ -8,6 +8,9 @@ namespace LSW._02._Code.Entity.Players.States
         private readonly PlayerController _player;
         private readonly PlayerAnimation _animation;
         private readonly EntityCombatComponent _combat;
+        private Vector2 _attackDirection;
+        private bool _isAirborneAttack;
+        private bool _isFinishingAttack;
 
         public PlayerAttackState(PlayerController player) : base(player)
         {
@@ -31,27 +34,32 @@ namespace LSW._02._Code.Entity.Players.States
 
             _animation.OnAttackCast += CastAttack;
             _animation.OnAttackAnimationEnd += EndAttack;
-            _animation.SetParam(_animation.AttackAnimationData);
+            _isFinishingAttack = false;
+            _isAirborneAttack = !_player.IsGrounded;
+            bool isAttackingUpward = _player.Rigidbody.linearVelocity.y > 0f;
+            _attackDirection = _isAirborneAttack
+                ? (isAttackingUpward ? Vector2.up : Vector2.down)
+                : _player.AimDirection;
+
+            if (_isAirborneAttack)
+                _animation.PlayAirAttack(isAttackingUpward);
+            else
+                _animation.SetParam(_animation.AttackAnimationData);
         }
 
         public override void Update()
         {
             base.Update();
 
-            if (_player.IsDead || _player.IsStunned)
+            if (_player.IsDead)
                 return;
-            
-            if (!_player.IsGrounded)
-            {
-                _player.StateMachine.ChangeState(PlayerController.JumpState);
-            }
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            if (_player.IsDead || _player.IsStunned)
+            if (_player.IsDead)
                 return;
 
             _player.Move();
@@ -59,14 +67,15 @@ namespace LSW._02._Code.Entity.Players.States
 
         private void CastAttack()
         {
-            if(_combat == null)
-                return;
-            Vector2 mouseDir = ((Vector2)_player.transform.position - _player.inputData.MousePosition).normalized;
-            _combat.Attack(mouseDir);
+            if (_combat != null)
+                _combat.Attack(_attackDirection, _isAirborneAttack);
         }
 
         public override void Exit()
         {
+            if (_isAirborneAttack && !_isFinishingAttack)
+                _animation?.EndAirAttack(_player.Rigidbody.linearVelocity.y > 0f);
+
             if (_animation != null)
             {
                 _animation.OnAttackCast -= CastAttack;
@@ -81,15 +90,14 @@ namespace LSW._02._Code.Entity.Players.States
             if (_player.IsDead)
                 return;
 
-            if (_player.IsStunned)
-            {
-                _player.StateMachine.ChangeState(PlayerController.IdleState);
-                return;
-            }
-            
+            _isFinishingAttack = true;
+
             if (!_player.IsGrounded)
             {
-                _player.StateMachine.ChangeState(PlayerController.JumpState);
+                _player.StateMachine.ChangeState(_player.Rigidbody.linearVelocity.y > 0f
+                    ? PlayerController.JumpState
+                    : PlayerController.FallState);
+                _animation.EndAirAttack(_player.Rigidbody.linearVelocity.y > 0f);
                 return;
             }
 
@@ -101,6 +109,9 @@ namespace LSW._02._Code.Entity.Players.States
             {
                 _player.StateMachine.ChangeState(PlayerController.IdleState);
             }
+
+            if (_isAirborneAttack)
+                _animation.EndAirAttack(false);
         }
     }
 }

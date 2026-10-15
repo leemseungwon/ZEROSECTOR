@@ -22,8 +22,7 @@ namespace LSW._02._Code.Entity.Players.States
 
             if (_player.HasJumpRequest)
             {
-                _player.Jump();
-                _animation.SetParam(_animation.JumpAnimationData);    
+                PlayJumpIfRequested();
             }
         }
 
@@ -31,7 +30,10 @@ namespace LSW._02._Code.Entity.Players.States
         {
             base.Update();
 
-            if (_player.IsDead || _player.IsStunned)
+            if (_player.IsDead)
+                return;
+
+            if (PlayJumpIfRequested())
                 return;
 
             if (StateTimer < 0.05f)
@@ -44,16 +46,29 @@ namespace LSW._02._Code.Entity.Players.States
                 _player.StateMachine.ChangeState(_player.MoveInput != 0f ? 
                     PlayerController.MoveState : PlayerController.IdleState
                 );
+                return;
             }
+
+            if (_player.Rigidbody.linearVelocity.y <= 0f)
+                _player.StateMachine.ChangeState(PlayerController.FallState);
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
 
-            if (_player.IsDead || _player.IsStunned)
+            if (_player.IsDead)
                 return;
             _player.Move();
+        }
+
+        private bool PlayJumpIfRequested()
+        {
+            if (!_player.Jump())
+                return false;
+
+            _animation.PlayJump();
+            return true;
         }
     }
 }

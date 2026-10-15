@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using LSW._02._Code.Common;
 using LSW._02._Code.Entity;
 using LSW._02._Code.Sos;
 using UnityEngine;
@@ -10,27 +10,49 @@ namespace LSW._02._Code.Combat.Katana
     {
         [Header("Attack")]
         [SerializeField] private Transform attackPoint;
-        [SerializeField] private AttackData attackData;
         [SerializeField] private LayerMask enemyLayers;
 
         private BaseEntity _owner;
-
-        public event Action OnHitEnemy;
+        private WeaponData _weaponData;
 
         public void Initialize(BaseEntity owner)
         {
             _owner = owner;
         }
 
-        public void Attack()
+        public void Equip(WeaponData weaponData)
         {
-            if (attackPoint == null || _owner == null)
-                return;
+            _weaponData = weaponData != null && weaponData.weaponType == WeaponType.Katana
+                ? weaponData
+                : null;
+        }
+
+        public bool Attack()
+        {
+            return Attack(null);
+        }
+
+        public bool Attack(Vector2? direction)
+        {
+            if (attackPoint == null || _owner == null || _weaponData == null)
+                return false;
             
-            Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.transform.position,
-                attackData.attackRadius, enemyLayers);
+            Vector2 attackPosition = attackPoint.transform.position;
+            if (direction.HasValue && Mathf.Abs(direction.Value.y) > 0.7f)
+            {
+                Collider2D ownerCollider = _owner.GetComponent<Collider2D>();
+                Vector2 ownerCenter = ownerCollider != null
+                    ? ownerCollider.bounds.center
+                    : _owner.transform.position;
+                attackPosition = ownerCenter +
+                                 Vector2.up * Mathf.Sign(direction.Value.y) * _weaponData.attackRadius;
+            }
+
+            Collider2D[] hits = Physics2D.OverlapCircleAll(attackPosition,
+                _weaponData.attackRadius, enemyLayers);
 
             HashSet<BaseEntity> hitEntities = new();
+            bool killedEnemy = false;
 
             foreach (Collider2D hit in hits)
             {
@@ -44,23 +66,21 @@ namespace LSW._02._Code.Combat.Katana
                     continue;
                 }
 
-                Tools.ReceiveDamageToTarget(
-                    _owner,
-                    target,
-                    attackData
-                );
+                bool hitTarget = Tools.AttackTarget(_owner, target);
 
-                OnHitEnemy?.Invoke();
+                if (hitTarget && target.IsDead)
+                    killedEnemy = true;
             }
-            
-            Debug.Log("Attack");
+
+            return killedEnemy;
         }
 
         private void OnDrawGizmosSelected()
         {
-            if (attackPoint == null) return;
+            if (attackPoint == null || _weaponData == null)
+                return;
 
-            Gizmos.DrawWireSphere(attackPoint.transform.position, attackData.attackRadius);
+            Gizmos.DrawWireSphere(attackPoint.transform.position, _weaponData.attackRadius);
         }
     }
 }

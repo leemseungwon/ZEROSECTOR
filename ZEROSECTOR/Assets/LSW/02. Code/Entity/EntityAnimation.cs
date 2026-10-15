@@ -60,28 +60,28 @@ namespace LSW._02._Code.Entity
             if(!CheckValidAnimData(data))
                 return;
             
-            Animator.SetFloat(data.animationHash, value, lerpTime, Time.deltaTime);
+            Animator.SetFloat(Animator.StringToHash(data.animationName), value, lerpTime, Time.deltaTime);
         }
 
         public void SetParam(AnimationData data, bool value)
         {
             if(!CheckValidAnimData(data))
                 return;
-            Animator.SetBool(data.animationHash, value);
+            Animator.SetBool(Animator.StringToHash(data.animationName), value);
         }
 
         public void SetParam(AnimationData data, int value)
         {
             if(!CheckValidAnimData(data))
                 return;
-            Animator.SetInteger(data.animationHash, value);
+            Animator.SetInteger(Animator.StringToHash(data.animationName), value);
         }
         
         public void SetParam(AnimationData data)
         {
             if(!CheckValidAnimData(data))
                 return;
-            Animator.SetTrigger(data.animationHash);
+            Animator.SetTrigger(Animator.StringToHash(data.animationName));
         }
         
         private bool CheckValidAnimData(AnimationData data)
@@ -89,7 +89,7 @@ namespace LSW._02._Code.Entity
             if(!data)
                 return false;
 
-            bool isValid = _validParamHashes.Contains(data.animationHash);
+            bool isValid = _validParamHashes.Contains(Animator.StringToHash(data.animationName));
             
             if(!isValid)
                 Debug.LogError($"AnimationData is not valid. {data.animationName}");

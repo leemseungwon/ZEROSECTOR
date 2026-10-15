@@ -18,15 +18,12 @@ namespace LSW._02._Code.Common
     public enum EntityStatType
     {
         MoveSpeed,
-        MaxHp,
-        AttackDamage,
         JumpForce
     }
     
     public enum StatModifierType
     {
-        MoveSpeed,
-        AttackDamage
+        MoveSpeed
     }
     
     public enum WeaponType

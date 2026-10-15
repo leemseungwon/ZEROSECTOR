@@ -114,12 +114,12 @@ TextureImporter:
       name: 10 - attack 1_0
       rect:
         serializedVersion: 2
-        x: 104
-        y: 48
-        width: 95
-        height: 34
+        x: 100
+        y: 45
+        width: 103
+        height: 37
       alignment: 9
-      pivot: {x: 0.17099755, y: 0.5934457}
+      pivot: {x: 0.21488501, y: 0.6012938}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -136,12 +136,12 @@ TextureImporter:
       name: 10 - attack 1_1
       rect:
         serializedVersion: 2
-        x: 342
-        y: 48
-        width: 95
-        height: 34
+        x: 339
+        y: 47
+        width: 105
+        height: 36
       alignment: 9
-      pivot: {x: 0.19450748, y: 0.5937594}
+      pivot: {x: 0.2058056, y: 0.5889988}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -158,20 +158,20 @@ TextureImporter:
       name: 10 - attack 1_2
       rect:
         serializedVersion: 2
-        x: 581
-        y: 48
-        width: 95
-        height: 34
+        x: 586
+        y: 47
+        width: 99
+        height: 36
       alignment: 9
-      pivot: {x: 0.17643979, y: 0.5916573}
+      pivot: {x: 0.11639404, y: 0.59273994}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: a3bf2c2e9a6233e449acd67e5afc804f
-      internalID: 1804572185773556417
+      spriteID: c6589b512d4f4b9d0800000000000000
+      internalID: -2759311488526482068
       vertices: []
       indices: 
       edges: []
@@ -180,7 +180,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: bf249842f6b21114796c96522b51f68c
+    spriteID: 1c056833cc0794843acc853e47c73dc6
     internalID: 0
     vertices: []
     indices: 
@@ -188,13 +188,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
       10 - attack 1_0: -3036818911943204862
       10 - attack 1_1: -4470459595627553341
-      10 - attack 1_2: 1804572185773556417
+      10 - attack 1_2: -2759311488526482068
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

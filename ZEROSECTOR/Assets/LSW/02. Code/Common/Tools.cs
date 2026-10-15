@@ -9,19 +9,11 @@ public class Tools
         return (mask.value & (1 << layer)) != 0;
     }
 
-    public static bool ReceiveDamageToTarget(BaseEntity receiver, BaseEntity target, AttackData attackData)
+    public static bool AttackTarget(BaseEntity attacker, BaseEntity target)
     {
-        if(receiver == null || target == null || attackData == null)
-        {
-            Debug.LogWarning("Receiver, Target, or AttackData is null.");
-            return false;
-        }
-
-        if (receiver == target)
+        if (attacker == null || target == null || attacker == target)
             return false;
 
-        int finalDamage = receiver.CurrentAttackDamage + attackData.attackDamage;
-        Vector2 knockBackDir = ((Vector2)target.transform.position - (Vector2)receiver.transform.position).normalized;
-        return target.TakeDamage(finalDamage, knockBackDir, attackData.knockbackPower, attackData.stunDuration, receiver);
+        return target.ReceiveHit(attacker);
     }
 }

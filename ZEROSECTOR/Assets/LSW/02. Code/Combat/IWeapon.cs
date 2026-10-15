@@ -5,6 +5,6 @@ namespace LSW._02._Code.Combat
     public interface IWeapon
     {
         void Initialize(BaseEntity owner);
-        void Attack();
+        bool Attack();
     }
 }

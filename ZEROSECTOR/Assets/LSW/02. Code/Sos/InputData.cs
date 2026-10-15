@@ -113,7 +113,7 @@ namespace LSW._02._Code.Sos
 
         public void OnSwitch(InputAction.CallbackContext context)
         {
-            if(context.started)
+            if (_isInputEnabled && context.started)
                 OnSwitchPressed?.Invoke();
         }
 

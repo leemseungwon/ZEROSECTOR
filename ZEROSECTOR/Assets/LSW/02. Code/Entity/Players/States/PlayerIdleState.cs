@@ -31,7 +31,7 @@ namespace LSW._02._Code.Entity.Players.States
         {
             base.Update();
 
-            if (_player.IsDead || _player.IsStunned)
+            if (_player.IsDead)
                 return;
 
             if (!_player.IsGrounded)

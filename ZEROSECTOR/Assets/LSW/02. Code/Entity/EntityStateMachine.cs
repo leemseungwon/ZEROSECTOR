@@ -43,6 +43,22 @@ namespace LSW._02._Code.Entity
                 Debug.LogError("State not found: " + newState + "");
             }
         }
+
+        public void RestartState(string stateName)
+        {
+            if (CurrentState != null)
+                CurrentState.Value.State.Exit();
+
+            if (!GetState(stateName, out StateData stateData))
+            {
+                CurrentState = null;
+                Debug.LogError("State not found: " + stateName);
+                return;
+            }
+
+            CurrentState = stateData;
+            CurrentState.Value.State.Enter();
+        }
         
         private bool GetState(string stateName, out StateData stateData)
         {
