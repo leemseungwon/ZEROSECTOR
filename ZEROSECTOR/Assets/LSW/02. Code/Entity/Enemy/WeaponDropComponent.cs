@@ -1,4 +1,5 @@
 using LSW._02._Code.Combat;
+using LSW._02._Code.Entity.Rooms;
 using LSW._02._Code.Entity.Players;
 using UnityEngine;
 
@@ -31,7 +32,9 @@ namespace LSW._02._Code.Entity.Enemy
             {
                 WeaponPickup droppedWeapon = Instantiate(pickup, transform.position, Quaternion.identity);
                 droppedWeapon.MarkAsRuntimeDrop();
-                if (killer.TryGetComponent(out RoomController roomController))
+                if (Room.ActiveRoom != null)
+                    Room.ActiveRoom.RegisterPickup(droppedWeapon);
+                else if (killer.TryGetComponent(out RoomController roomController))
                     roomController.RegisterPickup(droppedWeapon);
             }
         }

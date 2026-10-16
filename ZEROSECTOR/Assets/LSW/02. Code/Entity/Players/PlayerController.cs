@@ -540,11 +540,14 @@ namespace LSW._02._Code.Entity.Players
             _jumpCount = 0;
             _dashCooldownRemaining = 0f;
             _katanaAttackCooldownRemaining = 0f;
+            if (_isParrying && Animation is PlayerAnimation playerAnimation)
+                playerAnimation.PlayParry(false);
             _isParrying = false;
             _parrySucceeded = false;
             _parryCooldownRemaining = 0f;
             _counterDashTarget = null;
             StateMachine?.RestartState(IdleState);
+            CheckGround();
         }
 
         public bool Jump()

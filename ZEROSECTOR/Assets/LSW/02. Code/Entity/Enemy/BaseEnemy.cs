@@ -119,6 +119,7 @@ namespace LSW._02._Code.Entity.Enemy
         {
             gameObject.SetActive(true);
             base.ResetForRoom(position);
+            Rigidbody.bodyType = RigidbodyType2D.Dynamic;
             _initialPosition = position;
             _patrolDirection = 1f;
 
@@ -239,6 +240,11 @@ namespace LSW._02._Code.Entity.Enemy
         }
 
         public void DespawnAfterDeath()
+        {
+            DespawnFromRoom();
+        }
+
+        public void DespawnFromRoom()
         {
             if (StatData is EnemyStatData statData &&
                 !string.IsNullOrWhiteSpace(statData.poolName))

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using LSW._02._Code.Combat;
+using LSW._02._Code.Entity.Rooms;
 using UnityEngine;
 
 namespace LSW._02._Code.Entity.Players
@@ -82,6 +83,9 @@ namespace LSW._02._Code.Entity.Players
 
         private void HandlePlayerDeath()
         {
+            if (Room.ActiveRoom != null)
+                return;
+
             if (_restartCoroutine == null)
                 _restartCoroutine = StartCoroutine(RestartRoom());
         }

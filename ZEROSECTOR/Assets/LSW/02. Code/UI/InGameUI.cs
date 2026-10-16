@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using LSW._02._Code.Common;
 using LSW._02._Code.Entity;
+using LSW._02._Code.Entity.Rooms;
 using LSW._02._Code.Entity.Players;
 using LSW._02._Code.Entity.Players.Components;
 using LSW._02._Code.Sos;
@@ -16,7 +17,7 @@ namespace LSW._02._Code.UI
     {
         private PlayerController _player;
         private PlayerInventory _inventory;
-        private RoomController _room;
+        private Room _room;
         private GameObject _inventoryPanel;
         private Button _inventoryToggleButton;
         private Text _inventoryTitle;
@@ -33,6 +34,7 @@ namespace LSW._02._Code.UI
             if (!_isBound)
                 BindPlayer();
 
+            _room = Room.ActiveRoom;
             if (_inventoryPanel != null && _inventoryPanel.activeSelf &&
                 (_room == null || !_room.CanOpenInventory))
             {
@@ -57,7 +59,7 @@ namespace LSW._02._Code.UI
                 !_player.GetCompo(out _inventory))
                 return;
 
-            _room = _player.GetComponent<RoomController>();
+            _room = Room.ActiveRoom;
             _player.inputData.OnSwitchPressed += ToggleInventory;
             _inventory.OnInventoryChanged += RefreshInventory;
             BuildInventoryPanel();
