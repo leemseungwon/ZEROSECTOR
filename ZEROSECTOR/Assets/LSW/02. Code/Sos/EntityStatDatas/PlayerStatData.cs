@@ -6,5 +6,7 @@ namespace LSW._02._Code.Sos.EntityStatDatas
     public class PlayerStatData : EntityStatData
     {
         public float initJumpForce;
+        public float postDashInvincibilityDuration = 0.2f;
+        public float postParryInvincibilityDuration = 0.5f;
     }
 }

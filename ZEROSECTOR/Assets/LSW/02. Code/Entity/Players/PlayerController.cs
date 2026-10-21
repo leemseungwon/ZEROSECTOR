@@ -35,14 +35,17 @@ namespace LSW._02._Code.Entity.Players
         [SerializeField] private float dashHitRadius = 0.35f;
         [SerializeField] private LayerMask dashCollisionLayers =
             (1 << 0) | (1 << 6) | (1 << 8);
+        [SerializeField, Min(0f)] private float postDashInvincibilityDuration = 0.2f;
 
         [Header("Parry")]
         [SerializeField, Min(0f)] private float parryCooldown = 0.5f;
+        [SerializeField, Min(0f)] private float postParryInvincibilityDuration = 0.5f;
 
         public float CurrentJumpForce { get; private set; }
         public bool IsGrounded { get; private set; }
         public bool IsDashing => StateMachine?.CurrentState?.stateName == DashState;
-        public bool IsParrying => _isParrying;
+        public bool IsParrying => StateMachine?.CurrentState?.stateName == ParryState;
+        public bool WasParrySucceeded => _parrySucceeded;
         public float MoveInput => inputData != null ? inputData.MoveInput : 0f;
         public bool HasJumpRequest => _jumpRequested;
         public Vector2 AimDirection
@@ -69,11 +72,12 @@ namespace LSW._02._Code.Entity.Players
         private float _dashCooldownRemaining;
         private float _katanaAttackCooldownRemaining;
         private float _parryCooldownRemaining;
-        private bool _isParrying;
         private bool _parrySucceeded;
         private BaseEntity _counterDashTarget;
         private float _facingDirection = 1f;
         private EntityCombatComponent _combat;
+        private PlayerAnimation _playerAnimation;
+        private Vector2? _pendingGunAimDirection;
         private readonly RaycastHit2D[] _dashHitBuffer = new RaycastHit2D[16];
         
         public const string IdleState = "PlayerIdleState";
@@ -82,6 +86,7 @@ namespace LSW._02._Code.Entity.Players
         public const string FallState = "PlayerFallState";
         public const string AttackState = "PlayerAttackState";
         public const string DashState = "PlayerDashState";
+        public const string ParryState = "PlayerParryState";
 
         protected override void Awake()
         {
@@ -94,12 +99,18 @@ namespace LSW._02._Code.Entity.Players
             }
 
             GetCompo(out _combat);
+            GetCompo(out _playerAnimation);
+            if (_playerAnimation != null)
+            {
+                _playerAnimation.OnGunCast += ExecuteGunCast;
+            }
             inputData.InitializeInput();
             inputData.OnJumpPressed += HandleJumpPressed;
             inputData.OnAttackPressed += RequestAttack;
             inputData.OnDashPressed += StartDash;
             inputData.OnReflectPressed += StartParry;
-            inputData.OnReflectReleased += EndParry;
+            inputData.OnReflectReleased += HandleParryReleased;
+            inputData.OnGunPressed += ShootGun;
             
             InitStates();
             
@@ -111,6 +122,8 @@ namespace LSW._02._Code.Entity.Players
         {
             base.FixedUpdate();
 
+            CheckGround();
+
             Vector2 velocity = Rigidbody.linearVelocity;
             if (IsDashing)
             {
@@ -119,7 +132,11 @@ namespace LSW._02._Code.Entity.Players
                 return;
             }
 
-            if (IsGrounded && velocity.y <= 0f)
+            bool isJumping = StateMachine != null &&
+                             StateMachine.CurrentState.HasValue &&
+                             StateMachine.CurrentState.Value.stateName == JumpState;
+
+            if (IsGrounded && !isJumping)
             {
                 velocity.y = 0f;
             }
@@ -167,6 +184,11 @@ namespace LSW._02._Code.Entity.Players
                     {
                         stateName = DashState,
                         State = new PlayerDashState(this)
+                    },
+                    new StateData
+                    {
+                        stateName = ParryState,
+                        State = new PlayerParryState(this)
                     }
                 }
             );
@@ -178,6 +200,10 @@ namespace LSW._02._Code.Entity.Players
             if(StatData is PlayerStatData playerStatData)
             {
                 CurrentJumpForce = playerStatData.initJumpForce;
+                if (playerStatData.postDashInvincibilityDuration > 0f)
+                    postDashInvincibilityDuration = playerStatData.postDashInvincibilityDuration;
+                if (playerStatData.postParryInvincibilityDuration > 0f)
+                    postParryInvincibilityDuration = playerStatData.postParryInvincibilityDuration;
             }
         }
 
@@ -207,7 +233,8 @@ namespace LSW._02._Code.Entity.Players
 
         private void HandleJumpPressed()
         {
-            if (!IsDead && (IsGrounded || _jumpCount < Mathf.Max(1, maxJumpCount)))
+            if (!IsDead && !IsParrying &&
+                (IsGrounded || _jumpCount < Mathf.Max(1, maxJumpCount)))
                 _jumpRequested = true;
         }
 
@@ -228,11 +255,10 @@ namespace LSW._02._Code.Entity.Players
 
         private void StartDash()
         {
-            if (IsDead || IsDashing || _dashCooldownRemaining > 0f)
+            if (IsDead || IsDashing || IsParrying || _dashCooldownRemaining > 0f)
                 return;
 
             _dashCooldownRemaining = Mathf.Max(0f, dashCooldown);
-            EndParry();
             StateMachine.ChangeState(DashState);
         }
 
@@ -315,29 +341,25 @@ namespace LSW._02._Code.Entity.Players
 
                 Collider2D playerCollider = GetComponent<Collider2D>();
                 Collider2D targetCollider = target.GetComponent<Collider2D>();
-                float playerHalfWidth = playerCollider != null
-                    ? playerCollider.bounds.extents.x
-                    : 0f;
-                float targetHalfWidth = targetCollider != null
-                    ? targetCollider.bounds.extents.x
-                    : 0f;
+                
+                float playerHalfWidth = playerCollider != null ? playerCollider.bounds.extents.x : 0f;
+                float targetHalfWidth = targetCollider != null ? targetCollider.bounds.extents.x : 0f;
                 float standOff = playerHalfWidth + targetHalfWidth + 0.02f;
-                Vector2 destination = new Vector2(
-                    target.transform.position.x - direction * standOff,
-                    target.transform.position.y);
+                
+                Vector2 destination = new Vector2(target.transform.position.x - direction * standOff, target.transform.position.y);
                 Vector2 delta = destination - Rigidbody.position;
+                
                 float distance = delta.magnitude;
-                Vector2 dashDirection = distance > 0.0001f
-                    ? delta / distance
+                Vector2 dashDirection = distance > 0.0001f ? delta / distance
                     : Vector2.right * direction;
                 Collider2D bodyCollider = GetComponent<Collider2D>();
-                Vector2 castOrigin = bodyCollider != null
-                    ? bodyCollider.bounds.center
+                Vector2 castOrigin = bodyCollider != null ? bodyCollider.bounds.center
                     : Rigidbody.position;
+                
                 RaycastHit2D hit = GetDashBlockingHit(
                     bodyCollider, castOrigin, dashDirection, distance);
-                float travelDistance = hit.collider != null
-                    ? Mathf.Max(0f, hit.distance - 0.02f)
+                
+                float travelDistance = hit.collider != null ? Mathf.Max(0f, hit.distance - 0.02f)
                     : distance;
 
                 Rigidbody.position += dashDirection * travelDistance;
@@ -352,8 +374,7 @@ namespace LSW._02._Code.Entity.Players
                         _initialScale.z);
                 }
 
-                BaseEntity hitTarget = hit.collider != null
-                    ? hit.collider.GetComponentInParent<BaseEntity>()
+                BaseEntity hitTarget = hit.collider != null ? hit.collider.GetComponentInParent<BaseEntity>()
                     : null;
                 bool blockedByWall = hit.collider != null &&
                                      (hitTarget == null || hitTarget == this);
@@ -422,22 +443,42 @@ namespace LSW._02._Code.Entity.Players
 
         private void StartParry()
         {
-            if (IsDead || IsDashing || _isParrying || _parryCooldownRemaining > 0f)
+            if (IsDead || IsDashing || IsParrying || _parryCooldownRemaining > 0f)
                 return;
 
-            _isParrying = true;
-            _parrySucceeded = false;
             _parryCooldownRemaining = parryCooldown;
+            StateMachine.ChangeState(ParryState);
+        }
+
+        private void HandleParryReleased()
+        {
+            if (!IsParrying)
+                return;
+
+            if (!IsGrounded)
+            {
+                StateMachine.ChangeState(Rigidbody.linearVelocity.y > 0f
+                    ? JumpState
+                    : FallState);
+                return;
+            }
+
+            StateMachine.ChangeState(MoveInput != 0f ? MoveState : IdleState);
+        }
+
+        public void BeginParryState()
+        {
+            _parrySucceeded = false;
+            _jumpRequested = false;
+            Vector2 velocity = Rigidbody.linearVelocity;
+            velocity.x = 0f;
+            Rigidbody.linearVelocity = velocity;
             if (Animation is PlayerAnimation playerAnimation)
                 playerAnimation.PlayParry(true);
         }
 
-        private void EndParry()
+        public void EndParryState()
         {
-            if (!_isParrying)
-                return;
-
-            _isParrying = false;
             if (Animation is PlayerAnimation playerAnimation)
             {
                 playerAnimation.PlayParry(false);
@@ -469,7 +510,7 @@ namespace LSW._02._Code.Entity.Players
 
         public void Move()
         {
-            if (IsDead || IsDashing)
+            if (IsDead || IsDashing || IsParrying)
                 return;
 
             Vector2 velocity = Rigidbody.linearVelocity;
@@ -498,6 +539,9 @@ namespace LSW._02._Code.Entity.Players
             if (IsDead)
                 return false;
 
+            if (GetCompo(out EntityBuffComponent buff) && buff.IsInvincible)
+                return false;
+
             if (IsDashing)
                 return true;
 
@@ -512,13 +556,13 @@ namespace LSW._02._Code.Entity.Players
 
                 if (attackerIsInFront)
                 {
-                    _parrySucceeded = true;
-                    EndParry();
                     StartCounterDash(attacker);
                     return true;
                 }
             }
-
+            
+            Rigidbody.linearVelocity = Vector2.zero;
+            
             return base.ReceiveHit(attacker);
         }
 
@@ -528,9 +572,32 @@ namespace LSW._02._Code.Entity.Players
                 StateMachine == null || StateMachine.CurrentState == null)
                 return;
 
+            _parrySucceeded = true;
             _counterDashTarget = target;
             _dashCooldownRemaining = Mathf.Max(0f, dashCooldown);
+            ApplyPostParryInvincibility();
             StateMachine.ChangeState(DashState);
+        }
+
+        public void ApplyPostDashInvincibility()
+        {
+            if (postDashInvincibilityDuration > 0f && GetCompo(out EntityBuffComponent buff))
+            {
+                buff.ApplyInvincibility(postDashInvincibilityDuration);
+            }
+        }
+
+        public void ApplyPostParryInvincibility()
+        {
+            if (postParryInvincibilityDuration > 0f && GetCompo(out EntityBuffComponent buff))
+            {
+                buff.ApplyInvincibility(postParryInvincibilityDuration);
+            }
+        }
+
+        public void ConsumeParrySuccess()
+        {
+            _parrySucceeded = false;
         }
 
         public override void ResetForRoom(Vector3 position)
@@ -540,13 +607,12 @@ namespace LSW._02._Code.Entity.Players
             _jumpCount = 0;
             _dashCooldownRemaining = 0f;
             _katanaAttackCooldownRemaining = 0f;
-            if (_isParrying && Animation is PlayerAnimation playerAnimation)
-                playerAnimation.PlayParry(false);
-            _isParrying = false;
-            _parrySucceeded = false;
+            if (IsParrying)
+                _parrySucceeded = true;
             _parryCooldownRemaining = 0f;
             _counterDashTarget = null;
             StateMachine?.RestartState(IdleState);
+            _parrySucceeded = false;
             CheckGround();
         }
 
@@ -573,29 +639,72 @@ namespace LSW._02._Code.Entity.Players
         
         public void RequestAttack()
         {
-            if (IsDead || IsParrying || StateMachine == null || StateMachine.CurrentState == null ||
+            if (IsDead || !IsGrounded || IsParrying || StateMachine == null || StateMachine.CurrentState == null ||
                 StateMachine.CurrentState.Value.stateName == AttackState)
                 return;
-
-            bool usesKatana = _combat != null && _combat.IsKatanaEquipped;
-            if (usesKatana && _katanaAttackCooldownRemaining > 0f)
+            
+            if (_combat != null && _katanaAttackCooldownRemaining > 0f)
                 return;
 
             StateMachine.ChangeState(AttackState);
 
-            if (usesKatana)
+            if (_combat != null)
                 _katanaAttackCooldownRemaining = _combat.KatanaAttackCooldown;
+        }
+
+        public void ShootGun()
+        {
+            if (IsDead || IsDashing || IsParrying || _combat == null)
+                return;
+
+            if (!_combat.IsGunReady)
+                return;
+
+            _pendingGunAimDirection = AimDirection;
+
+            if (_combat.ConsumeGunGauge())
+            {
+                if (_playerAnimation != null && _playerAnimation.ShootGunAnimationData != null)
+                {
+                    _playerAnimation.SetParam(_playerAnimation.ShootGunAnimationData);
+                }
+                else
+                {
+                    ExecuteGunCast();
+                }
+            }
+        }
+
+        public void GunCast()
+        {
+            ExecuteGunCast();
+        }
+
+        public void ExecuteGunCast()
+        {
+            if (IsDead || _combat == null)
+                return;
+
+            Vector2 direction = _pendingGunAimDirection ?? AimDirection;
+            _pendingGunAimDirection = null;
+            _combat.ExecuteGunRaycast(direction);
         }
 
         public override void OnDestroy()
         {
+            if (_playerAnimation != null)
+            {
+                _playerAnimation.OnGunCast -= ExecuteGunCast;
+            }
+
             if (inputData != null)
             {
                 inputData.OnJumpPressed -= HandleJumpPressed;
                 inputData.OnAttackPressed -= RequestAttack;
                 inputData.OnDashPressed -= StartDash;
                 inputData.OnReflectPressed -= StartParry;
-                inputData.OnReflectReleased -= EndParry;
+                inputData.OnReflectReleased -= HandleParryReleased;
+                inputData.OnGunPressed -= ShootGun;
             }
 
             base.OnDestroy();

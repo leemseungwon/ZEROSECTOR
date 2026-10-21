@@ -136,4 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0edd0c8b2a4cfe9faf57c5bb8b678d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.System.PoolSystems.PoolSystem
-  pool: []
+  pool:
+  - poolName: EnemyProjectile
+    poolObject: {fileID: 100000, guid: 95bdf287a2564b37a387a2a596f2bdde, type: 3}
+    initialPoolSize: 10

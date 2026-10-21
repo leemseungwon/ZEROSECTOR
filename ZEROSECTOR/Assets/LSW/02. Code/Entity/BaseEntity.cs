@@ -1,8 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LSW._02._Code.Common;
-using LSW._02._Code.Entity.Players.Components;
 using LSW._02._Code.Sos.EntityStatDatas;
 using UnityEngine;
 
@@ -22,6 +22,8 @@ namespace LSW._02._Code.Entity
 
         private Rigidbody2D _rigidbody;
         private float _baseMoveSpeed;
+        private Coroutine _knockbackCoroutine;
+        private const float KnockbackDuration = 0.2f;
 
         public event Action OnDeathEvent;
         public event Action<BaseEntity> OnKilledBy;
@@ -102,10 +104,56 @@ namespace LSW._02._Code.Entity
             if (StateMachine is { CurrentState: not null })
                 StateMachine.FixedUpdate();
         }
+        
+        public virtual void Knockback(float knockBackPower, Vector2 direction)
+        {
+            if (Rigidbody == null || knockBackPower <= 0f)
+                return;
+
+            direction.Normalize();
+
+            if (_knockbackCoroutine != null)
+                StopCoroutine(_knockbackCoroutine);
+
+            _knockbackCoroutine = StartCoroutine(KnockbackCoroutine(direction, knockBackPower));
+        }
+
+        private IEnumerator KnockbackCoroutine(Vector2 direction, float knockbackPower)
+        {
+            direction = direction.normalized;
+
+            Vector2 startPosition = Rigidbody.position;
+
+            Vector2 targetPosition =
+                startPosition + direction * knockbackPower;
+
+            float elapsed = 0f;
+
+            while (elapsed < KnockbackDuration)
+            {
+                elapsed += Time.fixedDeltaTime;
+
+                float t = Mathf.Clamp01(elapsed / KnockbackDuration);
+
+                Rigidbody.MovePosition(
+                    Vector2.Lerp(startPosition, targetPosition, t)
+                );
+
+                yield return new WaitForFixedUpdate();
+            }
+
+            Rigidbody.MovePosition(targetPosition);
+            Rigidbody.linearVelocity = Vector2.zero;
+            
+            _knockbackCoroutine = null;
+        }
 
         public virtual bool ReceiveHit(BaseEntity attacker)
         {
             if (IsDead)
+                return false;
+
+            if (GetCompo(out EntityBuffComponent buff) && buff.IsInvincible)
                 return false;
 
             OnDeath(attacker);
@@ -144,8 +192,6 @@ namespace LSW._02._Code.Entity
                 buff.Reset();
             if (GetCompo(out EntityCombatComponent combat))
                 combat.ResetForRoom();
-            if (GetCompo(out PlayerInventory inventory))
-                inventory.ResetForRoom();
         }
 
         public virtual void OnDestroy()

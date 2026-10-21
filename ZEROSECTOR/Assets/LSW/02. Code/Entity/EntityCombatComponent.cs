@@ -1,7 +1,5 @@
 using LSW._02._Code.Combat.Gun;
 using LSW._02._Code.Combat.Katana;
-using LSW._02._Code.Common;
-using LSW._02._Code.Sos;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -13,24 +11,22 @@ namespace LSW._02._Code.Entity
         [Header("Weapons")]
         [SerializeField] private KatanaWeapon katanaWeapon;
         [SerializeField] private GunSkill gunSkill;
-        [SerializeField] private WeaponData defaultWeapon;
-        [Header("Gauge")] [SerializeField] private float maxGauge = 100f;
+        
+        [Header("Gauge")] 
+        [SerializeField] private float maxGauge = 100f;
         [FormerlySerializedAs("gaugePerHit")]
         [SerializeField] private float gaugePerKill = 20f;
         [SerializeField] private Slider gaugeSlider;
 
         private BaseEntity _owner;
         private float _currentGauge;
-        private WeaponData _equippedWeapon;
+        private float _checkpointGauge;
 
         public float CurrentGauge => _currentGauge;
         public float MaxGauge => maxGauge;
         public bool IsGunReady => _currentGauge >= maxGauge;
-        public bool IsKatanaEquipped =>
-            _equippedWeapon != null && _equippedWeapon.weaponType == WeaponType.Katana;
-        public float KatanaAttackCooldown =>
-            IsKatanaEquipped ? Mathf.Max(0f, _equippedWeapon.attackCooldown) : 0f;
-        public WeaponData DefaultWeapon => defaultWeapon;
+        public float KatanaAttackCooldown => katanaWeapon != null 
+            ? Mathf.Max(0f, katanaWeapon.WeaponData.attackCooldown) : 0f;
 
         public void Initialize(BaseEntity owner)
         {
@@ -41,6 +37,7 @@ namespace LSW._02._Code.Entity
             maxGauge = Mathf.Max(1f, maxGauge);
             gaugePerKill = Mathf.Max(0f, gaugePerKill);
             _currentGauge = 0f;
+            _checkpointGauge = 0f;
 
             if (katanaWeapon != null)
             {
@@ -53,8 +50,7 @@ namespace LSW._02._Code.Entity
             {
                 gunSkill.Initialize(_owner);
             }
-
-            EquipWeapon(defaultWeapon);
+            
             UpdateGaugeUI();
         }
 
@@ -71,39 +67,39 @@ namespace LSW._02._Code.Entity
         
         public bool Attack(Vector2? skillDirection = null, bool isAirborne = false)
         {
-            if (_equippedWeapon == null)
+            if (katanaWeapon == null)
                 return false;
 
-            if (_equippedWeapon.weaponType == WeaponType.Gun)
-            {
-                if (!IsGunReady || gunSkill == null)
-                    return false;
-
-                bool hitEnemy;
-                if (skillDirection.HasValue)
-                    hitEnemy = gunSkill.TryAttack(skillDirection.Value);
-                else
-                    hitEnemy = gunSkill.TryAttack();
-
-                if (!hitEnemy)
-                    return false;
-                _currentGauge = 0f;
-                UpdateGaugeUI();
-                return true;
-            }
-
-            return _equippedWeapon.weaponType == WeaponType.Katana &&
-                   katanaWeapon != null &&
+            return katanaWeapon != null &&
                    katanaWeapon.Attack(isAirborne ? skillDirection : null);
         }
 
-        public void EquipWeapon(WeaponData weapon)
+        public bool ConsumeGunGauge()
         {
-            _equippedWeapon = weapon;
-            katanaWeapon?.Equip(weapon);
-            gunSkill?.Equip(weapon);
+            if (!IsGunReady)
+                return false;
+
+            _currentGauge = 0f;
+            UpdateGaugeUI();
+            return true;
         }
 
+        public void GunCast()
+        {
+            ExecuteGunRaycast();
+        }
+
+        public bool ExecuteGunRaycast(Vector2? skillDirection = null)
+        {
+            if (gunSkill == null)
+                return false;
+
+            if (skillDirection.HasValue)
+                return gunSkill.TryAttack(skillDirection.Value);
+
+            return gunSkill.TryAttack();
+        }
+        
         public bool DashAttack(BaseEntity target)
         {
             if (_owner == null || target == null)
@@ -122,6 +118,11 @@ namespace LSW._02._Code.Entity
             UpdateGaugeUI();
         }
 
+        public void SaveCheckpointGauge()
+        {
+            _checkpointGauge = _currentGauge;
+        }
+
         public void ResetForRoom()
         {
             UnsubscribeEvents();
@@ -129,10 +130,12 @@ namespace LSW._02._Code.Entity
             if (_owner != null)
                 _owner.OnEnemyKilled += ChargeGauge;
 
+            _currentGauge = _checkpointGauge;
             UpdateGaugeUI();
         }
 
         private void UpdateGaugeUI()
+        
         {
             if (gaugeSlider == null)
                 return;

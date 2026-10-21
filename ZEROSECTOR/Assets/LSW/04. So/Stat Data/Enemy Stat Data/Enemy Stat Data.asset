@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Enemy Stat Data
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Sos.EntityStatDatas.EnemyStatData
   initMoveSpeed: 1
-  poolName: 
+  poolName: Enemy_NormalSoldier

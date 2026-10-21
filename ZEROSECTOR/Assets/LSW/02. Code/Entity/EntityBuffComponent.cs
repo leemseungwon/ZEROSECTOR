@@ -9,10 +9,32 @@ namespace LSW._02._Code.Entity
     {
         private BaseEntity _owner;
         private readonly List<StatModifier> _moveSpeedModifiers = new();
+        private float _invincibilityRemainingTime;
+
+        public bool IsInvincible => _invincibilityRemainingTime > 0f;
+        public float RemainingInvincibilityTime => _invincibilityRemainingTime;
 
         public void Initialize(BaseEntity owner)
         {
             _owner = owner;
+        }
+
+        public void ApplyInvincibility(float duration)
+        {
+            if (_owner == null || _owner.IsDead || duration <= 0f)
+                return;
+
+            _invincibilityRemainingTime = Mathf.Max(_invincibilityRemainingTime, duration);
+        }
+
+        public void ApplyInvincibility(string id, float duration)
+        {
+            ApplyInvincibility(duration);
+        }
+
+        public void RemoveInvincibility()
+        {
+            _invincibilityRemainingTime = 0f;
         }
 
         public void ApplyMoveSpeedMultiplier(string id, float multiplier, float duration)
@@ -102,6 +124,13 @@ namespace LSW._02._Code.Entity
 
         private void Update()
         {
+            if (_invincibilityRemainingTime > 0f)
+            {
+                _invincibilityRemainingTime -= Time.deltaTime;
+                if (_invincibilityRemainingTime < 0f)
+                    _invincibilityRemainingTime = 0f;
+            }
+
             bool changed = false;
             for (int i = _moveSpeedModifiers.Count - 1; i >= 0; i--)
             {
@@ -121,6 +150,7 @@ namespace LSW._02._Code.Entity
         {
             StopAllCoroutines();
             _moveSpeedModifiers.Clear();
+            _invincibilityRemainingTime = 0f;
             _owner?.RefreshModifiedStats();
         }
     }

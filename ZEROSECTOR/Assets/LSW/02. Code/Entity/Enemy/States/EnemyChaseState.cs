@@ -15,9 +15,11 @@ namespace LSW._02._Code.Entity.Enemy.States
             base.Update();
 
             if (!_enemy.HasLivingTarget() ||
-                _enemy.DistanceToTarget() > _enemy.DetectionRange)
+                _enemy.DistanceToTarget() > _enemy.DetectionRange ||
+                _enemy.IsTargetBlockedByWall())
             {
-                _enemy.StateMachine.ChangeState(BaseEnemy.PatrolState);
+                _enemy.StateMachine.ChangeState(_enemy.PatrolWhenIdle ? BaseEnemy.PatrolState
+                    : BaseEnemy.IdleState);
                 return;
             }
 

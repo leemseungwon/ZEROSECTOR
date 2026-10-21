@@ -1,0 +1,1965 @@
+fileFormatVersion: 2
+guid: 4855d6af88105a04fb460b7dfdcc4f7e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2501135875955241881
+    second: pixel_ui_scifi_font_0
+  - first:
+      213: 1427967294996127561
+    second: pixel_ui_scifi_font_1
+  - first:
+      213: -2864323325917901607
+    second: pixel_ui_scifi_font_2
+  - first:
+      213: -2159235547689564396
+    second: pixel_ui_scifi_font_3
+  - first:
+      213: 7642886098284540061
+    second: pixel_ui_scifi_font_4
+  - first:
+      213: -5209782556740194382
+    second: pixel_ui_scifi_font_5
+  - first:
+      213: -6086384257849938875
+    second: pixel_ui_scifi_font_6
+  - first:
+      213: -5593551788679909092
+    second: pixel_ui_scifi_font_7
+  - first:
+      213: -1418219609204081438
+    second: pixel_ui_scifi_font_8
+  - first:
+      213: 559779252397229215
+    second: pixel_ui_scifi_font_9
+  - first:
+      213: -2715593873749021560
+    second: pixel_ui_scifi_font_10
+  - first:
+      213: -5778631953894017270
+    second: pixel_ui_scifi_font_11
+  - first:
+      213: -7428321224324008448
+    second: pixel_ui_scifi_font_12
+  - first:
+      213: -2485179763258972165
+    second: pixel_ui_scifi_font_13
+  - first:
+      213: 6407328079083651981
+    second: pixel_ui_scifi_font_14
+  - first:
+      213: 1771567099212641848
+    second: pixel_ui_scifi_font_15
+  - first:
+      213: 7135861002060950022
+    second: pixel_ui_scifi_font_16
+  - first:
+      213: -989385170968078789
+    second: pixel_ui_scifi_font_17
+  - first:
+      213: -4904376133504315354
+    second: pixel_ui_scifi_font_18
+  - first:
+      213: -5906075364402517624
+    second: pixel_ui_scifi_font_19
+  - first:
+      213: 6730639578961438382
+    second: pixel_ui_scifi_font_20
+  - first:
+      213: -8932433814793928401
+    second: pixel_ui_scifi_font_21
+  - first:
+      213: 4734444158762928423
+    second: pixel_ui_scifi_font_22
+  - first:
+      213: 8273403185446029787
+    second: pixel_ui_scifi_font_23
+  - first:
+      213: 6817380495993780323
+    second: pixel_ui_scifi_font_24
+  - first:
+      213: 8565913165306841336
+    second: pixel_ui_scifi_font_25
+  - first:
+      213: 2638284558766509816
+    second: pixel_ui_scifi_font_26
+  - first:
+      213: 1480405287412818528
+    second: pixel_ui_scifi_font_27
+  - first:
+      213: -9163647024014526480
+    second: pixel_ui_scifi_font_28
+  - first:
+      213: -2339034221618515780
+    second: pixel_ui_scifi_font_29
+  - first:
+      213: 6541356134137954914
+    second: pixel_ui_scifi_font_30
+  - first:
+      213: 1388637858746071814
+    second: pixel_ui_scifi_font_31
+  - first:
+      213: -562896787633552132
+    second: pixel_ui_scifi_font_32
+  - first:
+      213: 6255916326569746756
+    second: pixel_ui_scifi_font_33
+  - first:
+      213: 471939317765741149
+    second: pixel_ui_scifi_font_34
+  - first:
+      213: -5688809358031258434
+    second: pixel_ui_scifi_font_35
+  - first:
+      213: 1934699734873356323
+    second: pixel_ui_scifi_font_36
+  - first:
+      213: -6492219879333679753
+    second: pixel_ui_scifi_font_37
+  - first:
+      213: 2997585073663681446
+    second: pixel_ui_scifi_font_38
+  - first:
+      213: 669413231325430880
+    second: pixel_ui_scifi_font_39
+  - first:
+      213: 495117840638405464
+    second: pixel_ui_scifi_font_40
+  - first:
+      213: 2072196360226653913
+    second: pixel_ui_scifi_font_41
+  - first:
+      213: 4055826862871920284
+    second: pixel_ui_scifi_font_42
+  - first:
+      213: -6997653089606025793
+    second: pixel_ui_scifi_font_43
+  - first:
+      213: 8960741796170735519
+    second: pixel_ui_scifi_font_44
+  - first:
+      213: -2866855998590075158
+    second: pixel_ui_scifi_font_45
+  - first:
+      213: 8317668490110788326
+    second: pixel_ui_scifi_font_46
+  - first:
+      213: -2247342203486352731
+    second: pixel_ui_scifi_font_47
+  - first:
+      213: -8268407986229488926
+    second: pixel_ui_scifi_font_48
+  - first:
+      213: 8771802175407283501
+    second: pixel_ui_scifi_font_49
+  - first:
+      213: -1988323025387767629
+    second: pixel_ui_scifi_font_50
+  - first:
+      213: -3408283345842341105
+    second: pixel_ui_scifi_font_51
+  - first:
+      213: -5806759035458375044
+    second: pixel_ui_scifi_font_52
+  - first:
+      213: -945679834093532586
+    second: pixel_ui_scifi_font_53
+  - first:
+      213: -3097771240140797630
+    second: pixel_ui_scifi_font_54
+  - first:
+      213: 7451010612534699724
+    second: pixel_ui_scifi_font_55
+  - first:
+      213: -9019710733866483204
+    second: pixel_ui_scifi_font_56
+  - first:
+      213: 9124205488641676581
+    second: pixel_ui_scifi_font_57
+  - first:
+      213: -6182763883393966412
+    second: pixel_ui_scifi_font_58
+  - first:
+      213: -7003945048480614273
+    second: pixel_ui_scifi_font_59
+  - first:
+      213: 7709021673944531454
+    second: pixel_ui_scifi_font_60
+  - first:
+      213: 1200396192735400197
+    second: pixel_ui_scifi_font_61
+  - first:
+      213: 8454666928393916767
+    second: pixel_ui_scifi_font_62
+  - first:
+      213: -2107991759704740867
+    second: pixel_ui_scifi_font_63
+  - first:
+      213: -4298797762018582693
+    second: pixel_ui_scifi_font_64
+  - first:
+      213: 8775905821350549772
+    second: pixel_ui_scifi_font_65
+  - first:
+      213: 3648222288288836200
+    second: pixel_ui_scifi_font_66
+  - first:
+      213: 9150222583967400805
+    second: pixel_ui_scifi_font_67
+  - first:
+      213: 7406291063748807651
+    second: pixel_ui_scifi_font_68
+  - first:
+      213: -8484962279194284903
+    second: pixel_ui_scifi_font_69
+  - first:
+      213: -3515276653827378842
+    second: pixel_ui_scifi_font_70
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationMethod: 0
+  spriteTessellationDetail: -1
+  spriteGeometrySubdivision: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 47
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9933c4dd3d1d5b220800000000000000
+      internalID: 2501135875955241881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_1
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 56
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94f9e1960b821d310800000000000000
+      internalID: 1427967294996127561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_2
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 56
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dc4cc46c11ef38d0800000000000000
+      internalID: -2864323325917901607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_3
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 56
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4174191a5bad802e0800000000000000
+      internalID: -2159235547689564396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_4
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 56
+        width: 11
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d907503a96cf01a60800000000000000
+      internalID: 7642886098284540061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_5
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 47
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bf69740e5223b7b0800000000000000
+      internalID: -5209782556740194382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_6
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 47
+        width: 12
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54c2358b3c1d88ba0800000000000000
+      internalID: -6086384257849938875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_7
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 58
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c11bbfab846bf52b0800000000000000
+      internalID: -5593551788679909092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_8
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 57
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ecb5eb87c8715ce0800000000000000
+      internalID: -1418219609204081438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_9
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 46
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9445c3a34cb4c700800000000000000
+      internalID: 559779252397229215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_10
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 47
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88c66f872c5405ad0800000000000000
+      internalID: -2715593873749021560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_11
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 56
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a07fc6cbadc2ecfa0800000000000000
+      internalID: -5778631953894017270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 38
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0063ca2143d49e890800000000000000
+      internalID: -7428321224324008448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_13
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf7a5ff1c2ed28dd0800000000000000
+      internalID: -2485179763258972165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_14
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 47
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d83ca21c0f66be850800000000000000
+      internalID: 6407328079083651981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_15
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 836b65cf3eed59810800000000000000
+      internalID: 1771567099212641848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_16
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 47
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60ae76226cba70360800000000000000
+      internalID: 7135861002060950022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_17
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b369862dd6ff442f0800000000000000
+      internalID: -989385170968078789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_18
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 47
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 620529d14e720fbb0800000000000000
+      internalID: -4904376133504315354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_19
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8892a107fb7690ea0800000000000000
+      internalID: -5906075364402517624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_20
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 47
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea66e2f5909086d50800000000000000
+      internalID: 6730639578961438382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_21
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f21458185ce990480800000000000000
+      internalID: -8932433814793928401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_22
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 47
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 729ccf3d0ef14b140800000000000000
+      internalID: 4734444158762928423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_23
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd98810ec5801d270800000000000000
+      internalID: 8273403185446029787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_24
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 47
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 368b26ae0733c9e50800000000000000
+      internalID: 6817380495993780323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_25
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f8c4f2c3ac30e670800000000000000
+      internalID: 8565913165306841336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_26
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fe0da5f3d11d9420800000000000000
+      internalID: 2638284558766509816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_27
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 29
+        width: 7
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 062e9dfe3c47b8410800000000000000
+      internalID: 1480405287412818528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_28
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f77c8e259f24d080800000000000000
+      internalID: -9163647024014526480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_29
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb032f6a4c41a8fd0800000000000000
+      internalID: -2339034221618515780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_30
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2628d941fb097ca50800000000000000
+      internalID: 6541356134137954914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_31
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60bf73476ce654310800000000000000
+      internalID: 1388637858746071814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_32
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 29
+        width: 14
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf4c4ef9a503038f0800000000000000
+      internalID: -562896787633552132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_33
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 47
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 441a1c5f0ca71d650800000000000000
+      internalID: 6255916326569746756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_34
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 38
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5a97fe1f4aac8600800000000000000
+      internalID: 471939317765741149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 25
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebcf0ab870a4d01b0800000000000000
+      internalID: -5688809358031258434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 10
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3283b2c882f69da10800000000000000
+      internalID: 1934699734873356323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_37
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77d2690ca6007e5a0800000000000000
+      internalID: -6492219879333679753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_38
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 20
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a3acbb1ebf899920800000000000000
+      internalID: 2997585073663681446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_39
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 10
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 064491589cb3a4900800000000000000
+      internalID: 669413231325430880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_40
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85be5358d030fd600800000000000000
+      internalID: 495117840638405464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_41
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 20
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d6ca245c9be1cc10800000000000000
+      internalID: 2072196360226653913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_42
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 11
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9eb7f70b01394830800000000000000
+      internalID: 4055826862871920284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_43
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbd3e94179753ee90800000000000000
+      internalID: -6997653089606025793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_44
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 20
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9f90c40033fa5c70800000000000000
+      internalID: 8960741796170735519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_45
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 11
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aee37d598a1e638d0800000000000000
+      internalID: -2866855998590075158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_46
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e263804c6b4e6370800000000000000
+      internalID: 8317668490110788326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_47
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 20
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aac3704c26dfc0e0800000000000000
+      internalID: -2247342203486352731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_48
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 11
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e2d9c29eb6b04d80800000000000000
+      internalID: -8268407986229488926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_49
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2d56218a93bbb970800000000000000
+      internalID: 8771802175407283501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_50
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 20
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b838053ebe0864e0800000000000000
+      internalID: -1988323025387767629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_51
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 11
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0bff25da5853b0d0800000000000000
+      internalID: -3408283345842341105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_52
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c72b63b3c6f3a6fa0800000000000000
+      internalID: -5806759035458375044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_53
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 20
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65aca99833540e2f0800000000000000
+      internalID: -945679834093532586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_54
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 11
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2498cf348718205d0800000000000000
+      internalID: -3097771240140797630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_55
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc6ebc9ccae476760800000000000000
+      internalID: 7451010612534699724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_56
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 19
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf14c1340ec83d280800000000000000
+      internalID: -9019710733866483204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_57
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 11
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5251820cc80bf9e70800000000000000
+      internalID: 9124205488641676581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_58
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 29
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4be10387109623aa0800000000000000
+      internalID: -6182763883393966412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_59
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 20
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f78f4fe361dfcce90800000000000000
+      internalID: -7003945048480614273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_60
+      rect:
+        serializedVersion: 2
+        x: 55
+        y: 11
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef140494e52fbfa60800000000000000
+      internalID: 7709021673944531454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_61
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 10
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50199b13af9a8a010800000000000000
+      internalID: 1200396192735400197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_62
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 19
+        width: 7
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f519921d6c2055570800000000000000
+      internalID: 8454666928393916767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_63
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 11
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfb2955c9a8eeb2e0800000000000000
+      internalID: -2107991759704740867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_64
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 20
+        width: 6
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5f53a1263a9754c0800000000000000
+      internalID: -4298797762018582693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_65
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 11
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c09d1e709d74ac970800000000000000
+      internalID: 8775905821350549772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_66
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 10
+        width: 12
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86a6e1397d611a230800000000000000
+      internalID: 3648222288288836200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_67
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 20
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 563422dc5fe1cfe70800000000000000
+      internalID: 9150222583967400805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_68
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 11
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ebc5e57b7e68c660800000000000000
+      internalID: 7406291063748807651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_69
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 20
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99c290823cb5f3a80800000000000000
+      internalID: -8484962279194284903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pixel_ui_scifi_font_70
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 20
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6613561128a373fc0800000000000000
+      internalID: -3515276653827378842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      pixel_ui_scifi_font_0: 2501135875955241881
+      pixel_ui_scifi_font_1: 1427967294996127561
+      pixel_ui_scifi_font_10: -2715593873749021560
+      pixel_ui_scifi_font_11: -5778631953894017270
+      pixel_ui_scifi_font_12: -7428321224324008448
+      pixel_ui_scifi_font_13: -2485179763258972165
+      pixel_ui_scifi_font_14: 6407328079083651981
+      pixel_ui_scifi_font_15: 1771567099212641848
+      pixel_ui_scifi_font_16: 7135861002060950022
+      pixel_ui_scifi_font_17: -989385170968078789
+      pixel_ui_scifi_font_18: -4904376133504315354
+      pixel_ui_scifi_font_19: -5906075364402517624
+      pixel_ui_scifi_font_2: -2864323325917901607
+      pixel_ui_scifi_font_20: 6730639578961438382
+      pixel_ui_scifi_font_21: -8932433814793928401
+      pixel_ui_scifi_font_22: 4734444158762928423
+      pixel_ui_scifi_font_23: 8273403185446029787
+      pixel_ui_scifi_font_24: 6817380495993780323
+      pixel_ui_scifi_font_25: 8565913165306841336
+      pixel_ui_scifi_font_26: 2638284558766509816
+      pixel_ui_scifi_font_27: 1480405287412818528
+      pixel_ui_scifi_font_28: -9163647024014526480
+      pixel_ui_scifi_font_29: -2339034221618515780
+      pixel_ui_scifi_font_3: -2159235547689564396
+      pixel_ui_scifi_font_30: 6541356134137954914
+      pixel_ui_scifi_font_31: 1388637858746071814
+      pixel_ui_scifi_font_32: -562896787633552132
+      pixel_ui_scifi_font_33: 6255916326569746756
+      pixel_ui_scifi_font_34: 471939317765741149
+      pixel_ui_scifi_font_35: -5688809358031258434
+      pixel_ui_scifi_font_36: 1934699734873356323
+      pixel_ui_scifi_font_37: -6492219879333679753
+      pixel_ui_scifi_font_38: 2997585073663681446
+      pixel_ui_scifi_font_39: 669413231325430880
+      pixel_ui_scifi_font_4: 7642886098284540061
+      pixel_ui_scifi_font_40: 495117840638405464
+      pixel_ui_scifi_font_41: 2072196360226653913
+      pixel_ui_scifi_font_42: 4055826862871920284
+      pixel_ui_scifi_font_43: -6997653089606025793
+      pixel_ui_scifi_font_44: 8960741796170735519
+      pixel_ui_scifi_font_45: -2866855998590075158
+      pixel_ui_scifi_font_46: 8317668490110788326
+      pixel_ui_scifi_font_47: -2247342203486352731
+      pixel_ui_scifi_font_48: -8268407986229488926
+      pixel_ui_scifi_font_49: 8771802175407283501
+      pixel_ui_scifi_font_5: -5209782556740194382
+      pixel_ui_scifi_font_50: -1988323025387767629
+      pixel_ui_scifi_font_51: -3408283345842341105
+      pixel_ui_scifi_font_52: -5806759035458375044
+      pixel_ui_scifi_font_53: -945679834093532586
+      pixel_ui_scifi_font_54: -3097771240140797630
+      pixel_ui_scifi_font_55: 7451010612534699724
+      pixel_ui_scifi_font_56: -9019710733866483204
+      pixel_ui_scifi_font_57: 9124205488641676581
+      pixel_ui_scifi_font_58: -6182763883393966412
+      pixel_ui_scifi_font_59: -7003945048480614273
+      pixel_ui_scifi_font_6: -6086384257849938875
+      pixel_ui_scifi_font_60: 7709021673944531454
+      pixel_ui_scifi_font_61: 1200396192735400197
+      pixel_ui_scifi_font_62: 8454666928393916767
+      pixel_ui_scifi_font_63: -2107991759704740867
+      pixel_ui_scifi_font_64: -4298797762018582693
+      pixel_ui_scifi_font_65: 8775905821350549772
+      pixel_ui_scifi_font_66: 3648222288288836200
+      pixel_ui_scifi_font_67: 9150222583967400805
+      pixel_ui_scifi_font_68: 7406291063748807651
+      pixel_ui_scifi_font_69: -8484962279194284903
+      pixel_ui_scifi_font_7: -5593551788679909092
+      pixel_ui_scifi_font_70: -3515276653827378842
+      pixel_ui_scifi_font_8: -1418219609204081438
+      pixel_ui_scifi_font_9: 559779252397229215
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

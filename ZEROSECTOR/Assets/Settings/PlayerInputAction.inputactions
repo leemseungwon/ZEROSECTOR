@@ -67,7 +67,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "Switch",
+                    "name": "UseGun",
                     "type": "Button",
                     "id": "a0db7cb7-113a-4642-81d0-1ef3ef6c1c4a",
                     "expectedControlType": "",
@@ -146,6 +146,17 @@
                 },
                 {
                     "name": "",
+                    "id": "8227ddbd-562a-4510-aaa3-1a7d2e5d3d1b",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "207f5fcb-9010-437c-a24f-d070cd628f70",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -173,7 +184,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Switch",
+                    "action": "UseGun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

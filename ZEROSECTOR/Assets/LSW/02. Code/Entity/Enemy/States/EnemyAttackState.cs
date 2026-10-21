@@ -30,7 +30,14 @@ namespace LSW._02._Code.Entity.Enemy.States
             base.Update();
 
             if (!_enemy.HasLivingTarget() ||
-                _enemy.DistanceToTarget() > _enemy.AttackRange)
+                _enemy.IsTargetBlockedByWall())
+            {
+                _enemy.StateMachine.ChangeState(_enemy.PatrolWhenIdle ? BaseEnemy.PatrolState
+                    : BaseEnemy.IdleState);
+                return;
+            }
+
+            if (_enemy.DistanceToTarget() > _enemy.AttackRange)
             {
                 _enemy.StateMachine.ChangeState(BaseEnemy.ChaseState);
                 return;
@@ -59,8 +66,12 @@ namespace LSW._02._Code.Entity.Enemy.States
             if (_attackCast)
                 return;
 
+            if (_enemy.IsTargetBlockedByWall())
+                return;
+
             _attackCast = true;
             _enemy.AttackTarget();
+            _enemy.FireProjectile();
         }
     }
 }

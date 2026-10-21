@@ -153,7 +153,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""priority"": 0
                 },
                 {
-                    ""name"": ""Switch"",
+                    ""name"": ""UseGun"",
                     ""type"": ""Button"",
                     ""id"": ""a0db7cb7-113a-4642-81d0-1ef3ef6c1c4a"",
                     ""expectedControlType"": """",
@@ -232,6 +232,17 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""8227ddbd-562a-4510-aaa3-1a7d2e5d3d1b"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""207f5fcb-9010-437c-a24f-d070cd628f70"",
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
@@ -259,7 +270,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Switch"",
+                    ""action"": ""UseGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -863,7 +874,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
         m_Player_Reflect = m_Player.FindAction("Reflect", throwIfNotFound: true);
-        m_Player_Switch = m_Player.FindAction("Switch", throwIfNotFound: true);
+        m_Player_UseGun = m_Player.FindAction("UseGun", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -963,7 +974,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Dash;
     private readonly InputAction m_Player_Reflect;
-    private readonly InputAction m_Player_Switch;
+    private readonly InputAction m_Player_UseGun;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1000,9 +1011,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Reflect => m_Wrapper.m_Player_Reflect;
         /// <summary>
-        /// Provides access to the underlying input action "Player/Switch".
+        /// Provides access to the underlying input action "Player/UseGun".
         /// </summary>
-        public InputAction @Switch => m_Wrapper.m_Player_Switch;
+        public InputAction @UseGun => m_Wrapper.m_Player_UseGun;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1047,9 +1058,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Reflect.started += instance.OnReflect;
             @Reflect.performed += instance.OnReflect;
             @Reflect.canceled += instance.OnReflect;
-            @Switch.started += instance.OnSwitch;
-            @Switch.performed += instance.OnSwitch;
-            @Switch.canceled += instance.OnSwitch;
+            @UseGun.started += instance.OnUseGun;
+            @UseGun.performed += instance.OnUseGun;
+            @UseGun.canceled += instance.OnUseGun;
         }
 
         /// <summary>
@@ -1079,9 +1090,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Reflect.started -= instance.OnReflect;
             @Reflect.performed -= instance.OnReflect;
             @Reflect.canceled -= instance.OnReflect;
-            @Switch.started -= instance.OnSwitch;
-            @Switch.performed -= instance.OnSwitch;
-            @Switch.canceled -= instance.OnSwitch;
+            @UseGun.started -= instance.OnUseGun;
+            @UseGun.performed -= instance.OnUseGun;
+            @UseGun.canceled -= instance.OnUseGun;
         }
 
         /// <summary>
@@ -1425,12 +1436,12 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnReflect(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Switch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "UseGun" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnSwitch(InputAction.CallbackContext context);
+        void OnUseGun(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

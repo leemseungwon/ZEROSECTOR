@@ -716,3 +716,5 @@ D:\ZEROSECTOR\ZEROSECTOR\Temp\Bin\Debug\Assembly-CSharp\Unity.2D.PixelPerfect.dl
 D:\ZEROSECTOR\ZEROSECTOR\Temp\Bin\Debug\Assembly-CSharp\Unity.2D.PixelPerfect.Editor.dll
 D:\ZEROSECTOR\ZEROSECTOR\Temp\Bin\Debug\Assembly-CSharp\Unity.2D.PixelPerfect.pdb
 D:\ZEROSECTOR\ZEROSECTOR\Temp\Bin\Debug\Assembly-CSharp\Unity.2D.PixelPerfect.Editor.pdb
+D:\ZEROSECTOR\ZEROSECTOR\Temp\Bin\Debug\Assembly-CSharp\Unity.AppUI.TextMateLib.dll
+D:\ZEROSECTOR\ZEROSECTOR\Temp\Bin\Debug\Assembly-CSharp\Unity.AppUI.TextMateLib.pdb

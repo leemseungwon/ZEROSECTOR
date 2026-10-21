@@ -21,6 +21,7 @@ namespace LSW._02._Code.Sos
         public event Action OnReflectPressed;
         public event Action OnReflectReleased;
         public event Action OnSwitchPressed;
+        public event Action OnGunPressed;
 
         private void OnEnable()
         {
@@ -111,10 +112,13 @@ namespace LSW._02._Code.Sos
                 OnReflectReleased?.Invoke();
         }
 
-        public void OnSwitch(InputAction.CallbackContext context)
+        public void OnUseGun(InputAction.CallbackContext context)
         {
             if (_isInputEnabled && context.started)
+            {
                 OnSwitchPressed?.Invoke();
+                OnGunPressed?.Invoke();
+            }
         }
 
         private void OnDisable()

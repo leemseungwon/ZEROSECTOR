@@ -17,6 +17,21 @@ namespace LSW._02._Code.Entity.Players.States
             _player.PerformDash();
         }
 
+        public override void Exit()
+        {
+            if (_player.WasParrySucceeded)
+            {
+                _player.ApplyPostParryInvincibility();
+                _player.ConsumeParrySuccess();
+            }
+            else
+            {
+                _player.ApplyPostDashInvincibility();
+            }
+
+            base.Exit();
+        }
+
         public override void Update()
         {
             base.Update();

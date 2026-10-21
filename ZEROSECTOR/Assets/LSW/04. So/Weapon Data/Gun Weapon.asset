@@ -17,3 +17,4 @@ MonoBehaviour:
   attackRadius: 1
   range: 30
   attackCooldown: 0
+  selfKnockbackPower: 1

@@ -42,6 +42,9 @@ namespace LSW._02._Code.Entity.Players.States
             if (_player.IsGrounded)
             {
                 _player.ConsumeJumpInput();
+                var velocity = _player.Rigidbody.linearVelocity;
+                velocity.y = 0f;
+                _player.Rigidbody.linearVelocity = velocity;
 
                 _player.StateMachine.ChangeState(_player.MoveInput != 0f ? 
                     PlayerController.MoveState : PlayerController.IdleState

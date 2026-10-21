@@ -19,6 +19,12 @@ namespace LSW._02._Code.Entity.Players.States
         public override void Enter(Action endAction = null)
         {
             base.Enter(endAction);
+            if (_player.IsGrounded)
+            {
+                var velocity = _player.Rigidbody.linearVelocity;
+                velocity.y = 0f;
+                _player.Rigidbody.linearVelocity = velocity;
+            }
             _animation.SetParam(_animation.IsMoveAnimationData, true);
         }
 
@@ -31,7 +37,9 @@ namespace LSW._02._Code.Entity.Players.States
 
             if (!_player.IsGrounded)
             {
-                _player.StateMachine.ChangeState(PlayerController.JumpState);
+                _player.StateMachine.ChangeState(_player.Rigidbody.linearVelocity.y > 0f
+                    ? PlayerController.JumpState
+                    : PlayerController.FallState);
                 return;
             }
 

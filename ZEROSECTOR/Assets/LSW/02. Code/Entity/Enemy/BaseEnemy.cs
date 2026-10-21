@@ -24,32 +24,43 @@ namespace LSW._02._Code.Entity.Enemy
         [SerializeField, Min(0f)] private float attackHitRadius = 1.2f;
         [SerializeField] private Vector2 attackHitOffset = new(0.7f, 0.25f);
         [SerializeField] private LayerMask attackHitLayers = 1 << 7;
+        [SerializeField] private LayerMask wallLayers = (1 << 0) | (1 << 6);
 
         [Header("Patrol")]
+        [SerializeField] private bool patrolWhenIdle = true;
         [SerializeField, Min(0f)] private float patrolDistance = 2f;
         [SerializeField, Min(0f)] private float idleDuration = 0.5f;
 
         [Header("Combat")]
         [SerializeField, Min(0f)] private float attackCooldown = 1f;
+        [SerializeField] private string projectilePrefabName;
+        [SerializeField, Min(0f)] private float projectileSpeed = 8f;
+        [SerializeField, Min(0.01f)] private float projectileLifetime = 4f;
+        [SerializeField] private Transform firePoint;
 
         private PoolSystem _poolSystem;
         private BaseEnemyAnimation _baseEnemyAnimation;
         private PlayerController _targetPlayer;
+        private Collider2D _collider;
         private Vector3 _initialPosition;
         private Vector3 _initialVisualScale;
         private float _patrolDirection = 1f;
         private bool _statesInitialized;
+        private readonly RaycastHit2D[] _wallHitBuffer = new RaycastHit2D[16];
 
         public PlayerController TargetPlayer => _targetPlayer;
         public float DetectionRange => detectionRange;
         public float AttackRange => attackRange;
+        public LayerMask WallLayers => wallLayers;
         public float PatrolDistance => patrolDistance;
         public float IdleDuration => idleDuration;
+        public bool PatrolWhenIdle => patrolWhenIdle;
         public float AttackCooldown => attackCooldown;
 
         protected override void Awake()
         {
             base.Awake();
+            _collider = GetComponent<Collider2D>();
             _initialPosition = transform.position;
             _initialVisualScale = Animation != null
                 ? Animation.transform.localScale
@@ -151,6 +162,45 @@ namespace LSW._02._Code.Entity.Enemy
             return _targetPlayer != null && !_targetPlayer.IsDead;
         }
 
+        public bool IsTargetBlockedByWall()
+        {
+            if (!HasLivingTarget())
+                return true;
+
+            Vector2 start = _collider != null ? (Vector2)_collider.bounds.center : (Vector2)transform.position;
+            Collider2D targetCollider = _targetPlayer.GetComponent<Collider2D>();
+            Vector2 targetPos = targetCollider != null ? (Vector2)targetCollider.bounds.center : (Vector2)_targetPlayer.transform.position;
+
+            Vector2 direction = targetPos - start;
+            float distance = direction.magnitude;
+            if (distance <= 0.0001f)
+                return false;
+
+            var filter = new ContactFilter2D();
+            filter.SetLayerMask(wallLayers);
+            filter.useTriggers = false;
+
+            int hitCount = Physics2D.Raycast(start, direction.normalized, filter, _wallHitBuffer, distance);
+            for (int i = 0; i < hitCount; i++)
+            {
+                RaycastHit2D hit = _wallHitBuffer[i];
+                if (hit.collider == null || hit.collider.isTrigger)
+                    continue;
+
+                if (hit.collider.transform.IsChildOf(transform) || hit.collider.transform.IsChildOf(_targetPlayer.transform))
+                    continue;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool HasLineOfSightToTarget()
+        {
+            return HasLivingTarget() && !IsTargetBlockedByWall();
+        }
+
         public float DistanceToTarget()
         {
             if (!HasLivingTarget())
@@ -161,7 +211,7 @@ namespace LSW._02._Code.Entity.Enemy
 
         public void MoveTowardsTarget()
         {
-            if (!HasLivingTarget())
+            if (!HasLivingTarget() || IsTargetBlockedByWall())
             {
                 StopHorizontalMovement();
                 return;
@@ -196,7 +246,7 @@ namespace LSW._02._Code.Entity.Enemy
 
         public void FaceTarget()
         {
-            if (!HasLivingTarget())
+            if (!HasLivingTarget() || IsTargetBlockedByWall())
                 return;
 
             FaceDirection(_targetPlayer.transform.position.x - transform.position.x);
@@ -204,7 +254,7 @@ namespace LSW._02._Code.Entity.Enemy
 
         public void AttackTarget()
         {
-            if (!HasLivingTarget())
+            if (!HasLivingTarget() || IsTargetBlockedByWall())
                 return;
 
             float facingDirection = Animation != null
@@ -224,6 +274,30 @@ namespace LSW._02._Code.Entity.Enemy
 
                 _targetPlayer.ReceiveHit(this);
                 return;
+            }
+        }
+
+        public void FireProjectile()
+        {
+            if (string.IsNullOrEmpty(projectilePrefabName) || !HasLivingTarget() || IsTargetBlockedByWall())
+                return;
+
+            float facingDirection = Animation != null
+                ? Mathf.Sign(Animation.transform.localScale.x)
+                : Mathf.Sign(_initialVisualScale.x);
+            Vector2 spawnPosition = firePoint != null
+                ? firePoint.position
+                : (Vector2)transform.position + new Vector2(attackHitOffset.x * facingDirection, attackHitOffset.y);
+            Vector2 direction = (Vector2)_targetPlayer.transform.position - spawnPosition;
+            direction.y += 0.5f;
+            
+            if (direction.sqrMagnitude <= 0.0001f)
+                return;
+
+            if (_poolSystem != null && _poolSystem.SpawnPool(projectilePrefabName, out EnemyProjectile projectile))
+            {
+                projectile.Launch(
+                    this, spawnPosition, direction.normalized, projectileSpeed, projectileLifetime);
             }
         }
 

@@ -22,6 +22,8 @@ namespace LSW._02._Code.Entity.Players.States
             
             var velocity = _player.Rigidbody.linearVelocity;
             velocity.x = 0f;
+            if (_player.IsGrounded)
+                velocity.y = 0f;
             _player.Rigidbody.linearVelocity = velocity;
             
             _animation.SetParam(_animation.IsMoveAnimationData, false);
@@ -36,7 +38,9 @@ namespace LSW._02._Code.Entity.Players.States
 
             if (!_player.IsGrounded)
             {
-                _player.StateMachine.ChangeState(PlayerController.JumpState);
+                _player.StateMachine.ChangeState(_player.Rigidbody.linearVelocity.y > 0f
+                    ? PlayerController.JumpState
+                    : PlayerController.FallState);
                 return;
             }
 

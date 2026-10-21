@@ -23,14 +23,14 @@ namespace LSW._02._Code.Entity.Enemy.States
 
             if (_enemy.HasLivingTarget())
             {
-                if (_enemy.DistanceToTarget() <= _enemy.DetectionRange)
+                if (_enemy.DistanceToTarget() <= _enemy.DetectionRange && !_enemy.IsTargetBlockedByWall())
                     _enemy.StateMachine.ChangeState(BaseEnemy.ChaseState);
-                else if (StateTimer >= _enemy.IdleDuration)
+                else if (_enemy.PatrolWhenIdle && StateTimer >= _enemy.IdleDuration)
                     _enemy.StateMachine.ChangeState(BaseEnemy.PatrolState);
                 return;
             }
 
-            if (StateTimer >= _enemy.IdleDuration)
+            if (_enemy.PatrolWhenIdle && StateTimer >= _enemy.IdleDuration)
                 _enemy.StateMachine.ChangeState(BaseEnemy.PatrolState);
         }
     }
