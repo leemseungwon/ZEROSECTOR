@@ -40,7 +40,7 @@ namespace LSW._02._Code.Entity.Players
         [Header("Parry")]
         [SerializeField, Min(0f)] private float parryCooldown = 0.5f;
         [SerializeField, Min(0f)] private float postParryInvincibilityDuration = 0.5f;
-
+        
         public float CurrentJumpForce { get; private set; }
         public bool IsGrounded { get; private set; }
         public bool IsDashing => StateMachine?.CurrentState?.stateName == DashState;
@@ -77,9 +77,8 @@ namespace LSW._02._Code.Entity.Players
         private float _facingDirection = 1f;
         private EntityCombatComponent _combat;
         private PlayerAnimation _playerAnimation;
-        private Vector2? _pendingGunAimDirection;
         private readonly RaycastHit2D[] _dashHitBuffer = new RaycastHit2D[16];
-        
+
         public const string IdleState = "PlayerIdleState";
         public const string MoveState = "PlayerMoveState";
         public const string JumpState = "PlayerJumpState";
@@ -87,6 +86,7 @@ namespace LSW._02._Code.Entity.Players
         public const string AttackState = "PlayerAttackState";
         public const string DashState = "PlayerDashState";
         public const string ParryState = "PlayerParryState";
+        public const string UseGunState = "PlayerUseGunState";
 
         protected override void Awake()
         {
@@ -116,6 +116,18 @@ namespace LSW._02._Code.Entity.Players
             
             if (Animation != null)
                 _initialScale = Animation.transform.localScale;
+        }
+        
+        public void GunCast()
+        {
+            StateData? currentStateData = StateMachine.CurrentState;
+            if(currentStateData.HasValue && currentStateData.Value.State is PlayerUseGunState useGunState)
+                useGunState.ExecuteGunCast();
+        }
+
+        public void ExecuteGunCast()
+        {
+            GunCast();
         }
 
         protected override void FixedUpdate()
@@ -189,6 +201,11 @@ namespace LSW._02._Code.Entity.Players
                     {
                         stateName = ParryState,
                         State = new PlayerParryState(this)
+                    },
+                    new StateData
+                    {
+                        stateName = UseGunState,
+                        State = new PlayerUseGunState(this)
                     }
                 }
             );
@@ -242,6 +259,7 @@ namespace LSW._02._Code.Entity.Players
         {
             base.Update();
             UpdateActionTimers();
+            UpdateFacingDirection();
             CheckGround();
         }
 
@@ -272,17 +290,20 @@ namespace LSW._02._Code.Entity.Players
                 return;
             }
 
-            Vector2 direction;
+            Vector2 direction = AimDirection;
+
             if (IsGrounded)
             {
-                float dashDirection = Mathf.Abs(MoveInput) > 0.01f
-                    ? Mathf.Sign(MoveInput)
-                    : _facingDirection;
-                direction = Vector2.right * dashDirection;
+                direction.y = 0f;
+            }
+
+            if (direction.sqrMagnitude < 0.0001f)
+            {
+                direction = Vector2.right * _facingDirection;
             }
             else
             {
-                direction = AimDirection;
+                direction.Normalize();
             }
 
             float distance = Mathf.Max(0f, dashDistance);
@@ -326,6 +347,19 @@ namespace LSW._02._Code.Entity.Players
 
             if (Animation is PlayerAnimation playerAnimation)
                 playerAnimation.PlayDash(hitEnemy);
+            
+            if (Mathf.Abs(direction.x) > 0.01f)
+            {
+                _facingDirection = Mathf.Sign(direction.x);
+
+                if (Animation != null)
+                {
+                    Animation.transform.localScale = new Vector3(
+                        Mathf.Abs(_initialScale.x) * _facingDirection,
+                        _initialScale.y,
+                        _initialScale.z);
+                }
+            }
         }
 
         public float DashDuration => Mathf.Max(0.01f, dashDuration);
@@ -342,22 +376,19 @@ namespace LSW._02._Code.Entity.Players
                 Collider2D playerCollider = GetComponent<Collider2D>();
                 Collider2D targetCollider = target.GetComponent<Collider2D>();
                 
-                float playerHalfWidth = playerCollider != null ? playerCollider.bounds.extents.x : 0f;
-                float targetHalfWidth = targetCollider != null ? targetCollider.bounds.extents.x : 0f;
-                float standOff = playerHalfWidth + targetHalfWidth + 0.02f;
+                float standOff = playerCollider.bounds.extents.x + targetCollider.bounds.extents.x + 0.02f;
                 
                 Vector2 destination = new Vector2(target.transform.position.x - direction * standOff, target.transform.position.y);
                 Vector2 delta = destination - Rigidbody.position;
                 
                 float distance = delta.magnitude;
-                Vector2 dashDirection = distance > 0.0001f ? delta / distance
-                    : Vector2.right * direction;
-                Collider2D bodyCollider = GetComponent<Collider2D>();
-                Vector2 castOrigin = bodyCollider != null ? bodyCollider.bounds.center
+                Vector2 dashDirection = distance > 0.0001f ? delta / distance : Vector2.right * direction;
+                
+                Vector2 castOrigin = playerCollider != null ? playerCollider.bounds.center
                     : Rigidbody.position;
                 
                 RaycastHit2D hit = GetDashBlockingHit(
-                    bodyCollider, castOrigin, dashDirection, distance);
+                    playerCollider, castOrigin, dashDirection, distance);
                 
                 float travelDistance = hit.collider != null ? Mathf.Max(0f, hit.distance - 0.02f)
                     : distance;
@@ -389,11 +420,8 @@ namespace LSW._02._Code.Entity.Players
                 playerAnimation.PlayDash(hitEnemy);
         }
 
-        private RaycastHit2D GetDashBlockingHit(
-            Collider2D bodyCollider,
-            Vector2 castOrigin,
-            Vector2 direction,
-            float distance)
+        private RaycastHit2D GetDashBlockingHit(Collider2D bodyCollider, Vector2 castOrigin,
+            Vector2 direction, float distance)
         {
             var filter = new ContactFilter2D();
             filter.SetLayerMask(dashCollisionLayers);
@@ -516,22 +544,32 @@ namespace LSW._02._Code.Entity.Players
             Vector2 velocity = Rigidbody.linearVelocity;
             velocity.x = MoveInput * CurrentMoveSpeed;
             Rigidbody.linearVelocity = velocity;
+        }
+        
+        private void UpdateFacingDirection()
+        {
+            if (Animation == null || IsDashing)
+                return;
+
+            float directionX;
             
-            if (Animation != null)
+            if (Mathf.Abs(MoveInput) > 0.01f)
             {
-                if (MoveInput > 0)
-                {
-                    _facingDirection = 1f;
-                    Animation.transform.localScale = new Vector3(Mathf.Abs(_initialScale.x),
-                        _initialScale.y, _initialScale.z);
-                }
-                else if (MoveInput < 0)
-                {
-                    _facingDirection = -1f;
-                    Animation.transform.localScale = new Vector3(-Mathf.Abs(_initialScale.x),
-                        _initialScale.y, _initialScale.z);
-                }
+                directionX = Mathf.Sign(MoveInput);
             }
+            else
+            {
+                directionX = Mathf.Sign(AimDirection.x);
+            }
+
+            if (Mathf.Abs(directionX) < 0.001f)
+                return;
+
+            _facingDirection = directionX;
+
+            Vector3 scale = Animation.transform.localScale;
+            scale.x = Mathf.Abs(_initialScale.x) * _facingDirection;
+            Animation.transform.localScale = scale;
         }
 
         public override bool ReceiveHit(BaseEntity attacker)
@@ -618,8 +656,7 @@ namespace LSW._02._Code.Entity.Players
 
         public bool Jump()
         {
-            if (!_jumpRequested || IsDead ||
-                (!IsGrounded && _jumpCount >= Mathf.Max(1, maxJumpCount)))
+            if (!_jumpRequested || IsDead || (!IsGrounded && _jumpCount >= Mathf.Max(1, maxJumpCount)))
                 return false;
 
             _jumpRequested = false;
@@ -657,39 +694,44 @@ namespace LSW._02._Code.Entity.Players
             if (IsDead || IsDashing || IsParrying || _combat == null)
                 return;
 
-            if (!_combat.IsGunReady)
+            if (!_combat.IsGunReady || StateMachine == null)
                 return;
 
-            _pendingGunAimDirection = AimDirection;
+            StateMachine.ChangeState(UseGunState);
+        }
+        
+        public bool CanUseGun()
+        {
+            return !IsDashing && !IsParrying &&
+                   _combat != null && _combat.IsGunReady;
+        }
 
-            if (_combat.ConsumeGunGauge())
+        public bool ConsumeGunGauge()
+        {
+            return _combat != null && _combat.ConsumeGunGauge();
+        }
+
+        public void SetGunReadyAnimation()
+        {
+            if (_playerAnimation != null &&
+                _playerAnimation.ReadyGunAnimationData != null)
             {
-                if (_playerAnimation != null && _playerAnimation.ShootGunAnimationData != null)
-                {
-                    _playerAnimation.SetParam(_playerAnimation.ShootGunAnimationData);
-                }
-                else
-                {
-                    ExecuteGunCast();
-                }
+                _playerAnimation.SetParam(_playerAnimation.ReadyGunAnimationData);
             }
         }
 
-        public void GunCast()
+        public void ResetGunReadyAnimation()
         {
-            ExecuteGunCast();
+            if (_playerAnimation != null)
+                _playerAnimation.SetParam(_playerAnimation.ShootGunAnimationData);
         }
 
-        public void ExecuteGunCast()
+        public void ExecuteGunRaycast()
         {
-            if (IsDead || _combat == null)
-                return;
-
-            Vector2 direction = _pendingGunAimDirection ?? AimDirection;
-            _pendingGunAimDirection = null;
-            _combat.ExecuteGunRaycast(direction);
+            if (!IsDead && _combat != null)
+                _combat.ExecuteGunRaycast();
         }
-
+        
         public override void OnDestroy()
         {
             if (_playerAnimation != null)
@@ -716,8 +758,7 @@ namespace LSW._02._Code.Entity.Players
                 return;
 
             Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(groundCheck.position,
-                groundCheckRadius);
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
     }
 }

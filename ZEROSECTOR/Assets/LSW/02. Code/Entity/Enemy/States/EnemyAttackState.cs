@@ -66,9 +66,6 @@ namespace LSW._02._Code.Entity.Enemy.States
             if (_attackCast)
                 return;
 
-            if (_enemy.IsTargetBlockedByWall())
-                return;
-
             _attackCast = true;
             _enemy.AttackTarget();
             _enemy.FireProjectile();

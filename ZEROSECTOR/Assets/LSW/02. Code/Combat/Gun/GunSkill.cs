@@ -1,9 +1,11 @@
 
 using LSW._02._Code.Entity;
 using LSW._02._Code.Entity.Enemy;
+using LSW._02._Code.Entity.Players;
 using LSW._02._Code.Sos;
+using LSW._02._Code.System;
+using LSW._02._Code.System.PoolSystems;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace LSW._02._Code.Combat.Gun
 {
@@ -14,11 +16,16 @@ namespace LSW._02._Code.Combat.Gun
         [SerializeField] private Transform firePoint;
         [SerializeField] private LayerMask enemyLayers;
 
-        private BaseEntity _owner;
+        [Header("Visual")]
+        [SerializeField] private string bulletLinePoolName;
+
+        private PlayerController _owner;
+        private PoolSystem _poolSystem;
 
         public void Initialize(BaseEntity owner)
         {
-            _owner = owner;
+            _owner = owner as PlayerController;
+            SystemHandler.Instance.GetSystem(out _poolSystem);
             if (firePoint == null && _owner != null)
                 firePoint = _owner.transform;
         }
@@ -35,33 +42,27 @@ namespace LSW._02._Code.Combat.Gun
 
         public bool TryAttack()
         {
-            Camera playerCamera = Camera.main;
-            if (firePoint == null || playerCamera == null)
+            if (_owner == null || _owner.inputData == null || firePoint == null)
                 return false;
 
-            if (Mouse.current == null)
+            Camera cam = _owner.PlayerCamera != null ? _owner.PlayerCamera
+                : Camera.main;
+
+            if (cam == null)
                 return false;
 
-            Vector2 mouseScreen =
-                Mouse.current.position.ReadValue();
+            Vector2 mouseScreen = _owner.inputData.MousePosition;
 
-            float distanceFromCamera = Mathf.Abs(
-                firePoint.position.z -
-                playerCamera.transform.position.z
+            float depth = Mathf.Abs(
+                firePoint.position.z - cam.transform.position.z
             );
 
-            Vector3 mouseWorld =
-                playerCamera.ScreenToWorldPoint(
-                    new Vector3(
-                        mouseScreen.x,
-                        mouseScreen.y,
-                        distanceFromCamera
-                    )
-                );
-
-            Vector2 direction =
-                (Vector2)mouseWorld - (Vector2)firePoint.position;
-
+            Vector3 mouseWorld = cam.ScreenToWorldPoint(
+                new Vector3(mouseScreen.x, mouseScreen.y, depth)
+            );
+            
+            Vector2 direction = (Vector2)mouseWorld - (Vector2)firePoint.position;
+            
             return TryAttack(direction);
         }
 
@@ -76,17 +77,20 @@ namespace LSW._02._Code.Combat.Gun
             direction.Normalize();
             _owner.Knockback(GunData != null ? GunData.selfKnockbackPower : 0f, -direction);
             
-            float range = GunData != null ? GunData.range : 30f;
-
             RaycastHit2D hit = Physics2D.Raycast(
                 firePoint.position,
                 direction,
-                range,
+                Mathf.Infinity,
                 enemyLayers
             );
-
+            
             if (hit.collider == null)
                 return false;
+            
+            if (_poolSystem.SpawnPool(bulletLinePoolName, out GunBulletLine bulletLine))
+            {
+                bulletLine.ShowLine(firePoint.position, hit.point);
+            }
 
             EnemyProjectile projectile = hit.collider.GetComponentInParent<EnemyProjectile>();
             if (projectile != null)

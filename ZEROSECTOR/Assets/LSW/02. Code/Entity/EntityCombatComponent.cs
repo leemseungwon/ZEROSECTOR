@@ -84,18 +84,10 @@ namespace LSW._02._Code.Entity
             return true;
         }
 
-        public void GunCast()
-        {
-            ExecuteGunRaycast();
-        }
-
-        public bool ExecuteGunRaycast(Vector2? skillDirection = null)
+        public bool ExecuteGunRaycast()
         {
             if (gunSkill == null)
                 return false;
-
-            if (skillDirection.HasValue)
-                return gunSkill.TryAttack(skillDirection.Value);
 
             return gunSkill.TryAttack();
         }

@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 409569818}
   - component: {fileID: 409569817}
   - component: {fileID: 409569821}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Area Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -945,7 +945,7 @@ GameObject:
   - component: {fileID: 475907510}
   - component: {fileID: 475907509}
   - component: {fileID: 475907508}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Area Door BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1539,7 +1539,7 @@ GameObject:
   - component: {fileID: 1214356438}
   - component: {fileID: 1214356437}
   - component: {fileID: 1214356436}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Tile BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9716,7 +9716,7 @@ GameObject:
   - component: {fileID: 1278684093}
   - component: {fileID: 1278684092}
   - component: {fileID: 1278684091}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13600,6 +13600,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1048170956133145900, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: <ReadyGunAnimationData>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: f79f3960c4891944a8e320393252296b, type: 2}
+    - target: {fileID: 1048170956133145900, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: <ShootGunAnimationData>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 595c5888c1af66c468467fdac3aa8bce, type: 2}
     - target: {fileID: 1463133293248736743, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13616,14 +13624,54 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2118861131204897978, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
     - target: {fileID: 3198043187828692208, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3439346785941085049, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 5079074480973140527, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079074480973140527, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1295216652659877552, guid: db977379f9f456b41968f017c966aa76, type: 3}
+    - target: {fileID: 5079074480973140527, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079074480973140527, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079074480973140527, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5429157679049652191, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
       propertyPath: <PlayerCamera>k__BackingField
       value: 
       objectReference: {fileID: 1665042504}
+    - target: {fileID: 5512168771911338717, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 5533067261354175101, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: bulletLinePoolName
+      value: Particle_BulletLine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5533067261354175101, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: enemyLayers.m_Bits
+      value: 320
+      objectReference: {fileID: 0}
     - target: {fileID: 5533067261354175101, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
       propertyPath: <GunData>k__BackingField
       value: 
@@ -13652,6 +13700,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5900760591593194580, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 6730929984633376981, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 6790369239649850611, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: gaugePerKill
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7023235897783520463, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
     - target: {fileID: 7124324419131560335, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -13796,7 +13860,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
       propertyPath: pool.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
       propertyPath: pool.Array.data[0].poolName
@@ -13807,12 +13871,24 @@ PrefabInstance:
       value: Enemy_NormalSoldier
       objectReference: {fileID: 0}
     - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
+      propertyPath: pool.Array.data[2].poolName
+      value: Particle_BulletLine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
       propertyPath: pool.Array.data[1].poolObject
       value: 
       objectReference: {fileID: 1341764414263540965, guid: ead025f3611d0184496e9708771099e9, type: 3}
     - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
+      propertyPath: pool.Array.data[2].poolObject
+      value: 
+      objectReference: {fileID: 5179498381484701269, guid: f6ebd85278f360d4ab682054fa04171b, type: 3}
+    - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
       propertyPath: pool.Array.data[1].initialPoolSize
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
+      propertyPath: pool.Array.data[2].initialPoolSize
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5712788458882781887, guid: 2024490ec79131549952f213d8959ea3, type: 3}
       propertyPath: inGameUI

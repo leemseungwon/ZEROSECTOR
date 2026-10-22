@@ -16,6 +16,7 @@ namespace LSW._02._Code.Entity
 
         protected Dictionary<Type, IEntityComponent> Components;
         public EntityStateMachine StateMachine { get; set; }
+        public EntityBuffComponent BuffComponent { get; set; }
         public Rigidbody2D Rigidbody => _rigidbody;
         public float CurrentMoveSpeed { get; private set; }
         public bool IsDead { get; protected set; }
@@ -23,7 +24,7 @@ namespace LSW._02._Code.Entity
         private Rigidbody2D _rigidbody;
         private float _baseMoveSpeed;
         private Coroutine _knockbackCoroutine;
-        private const float KnockbackDuration = 0.2f;
+        private const float KnockbackDuration = 0.05f;
 
         public event Action OnDeathEvent;
         public event Action<BaseEntity> OnKilledBy;
@@ -41,6 +42,8 @@ namespace LSW._02._Code.Entity
                 Animation = animation;
 
             _rigidbody = GetComponent<Rigidbody2D>();
+            if (GetCompo(out EntityBuffComponent buff))
+                BuffComponent = buff;
         }
 
         protected virtual void InitComponents()
