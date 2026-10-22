@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LSW._02._Code.Entity;
 using LSW._02._Code.Entity.Enemy;
 using LSW._02._Code.Entity.Players;
+using LSW._02._Code.Entity.Players.Components;
 using LSW._02._Code.System;
 using LSW._02._Code.System.PoolSystems;
 using UnityEngine;
@@ -54,9 +55,7 @@ namespace LSW._02._Code.Environments
                 if (roomCollider == null)
                     roomCollider = GetComponent<Collider2D>();
             }
-
-            if (roomCollider == null || !roomCollider.isTrigger)
-                Debug.LogError($"{nameof(Room)} on {name} requires a trigger Collider2D.", this);
+            
             else if (roomCollider.gameObject != gameObject)
             {
                 var triggerListener = roomCollider.gameObject.GetComponent<RoomTriggerListener>();
@@ -64,16 +63,13 @@ namespace LSW._02._Code.Environments
                     triggerListener = roomCollider.gameObject.AddComponent<RoomTriggerListener>();
                 triggerListener.Initialize(this);
             }
-
-            if (playerRespawnPoint == null)
-                Debug.LogError($"{nameof(Room)} on {name} requires a player respawn point.", this);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             HandleTriggerEnter(other);
         }
-
+        
         public void HandleTriggerEnter(Collider2D other)
         {
             PlayerController player = other.GetComponentInParent<PlayerController>();
@@ -102,14 +98,18 @@ namespace LSW._02._Code.Environments
 
             ActiveRoom = this;
             _player = player;
-            if (_player != null && _player.GetCompo(out EntityCombatComponent combat))
+
+            if (_player != null && _player.GetCompo(out PlayerCombatComponent combat))
             {
                 combat.SaveCheckpointGauge();
             }
+
             _player.OnDeathEvent += HandlePlayerDeath;
-            IsCleared = false;
+
             OnRoomActivated?.Invoke();
-            ResetRoomContents();
+
+            if (!IsCleared)
+                ResetRoomContents();
         }
 
         private void Deactivate()
@@ -147,8 +147,11 @@ namespace LSW._02._Code.Environments
                 Vector3 respawnPosition = playerRespawnPoint != null
                     ? playerRespawnPoint.position
                     : transform.position;
+
                 _player.ResetForRoom(respawnPosition);
-                ResetRoomContents();
+
+                if (!IsCleared)
+                    ResetRoomContents();
             }
 
             _restartCoroutine = null;

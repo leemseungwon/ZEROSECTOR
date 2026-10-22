@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LSW._02._Code.Common;
+using LSW._02._Code.Entity.Players.Components;
 using LSW._02._Code.Sos.EntityStatDatas;
 using UnityEngine;
 
@@ -193,7 +194,7 @@ namespace LSW._02._Code.Entity
 
             if (GetCompo(out EntityBuffComponent buff))
                 buff.Reset();
-            if (GetCompo(out EntityCombatComponent combat))
+            if (GetCompo(out PlayerCombatComponent combat))
                 combat.ResetForRoom();
         }
 
