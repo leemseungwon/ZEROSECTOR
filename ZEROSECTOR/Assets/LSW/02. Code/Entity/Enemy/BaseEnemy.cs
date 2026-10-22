@@ -279,7 +279,7 @@ namespace LSW._02._Code.Entity.Enemy
 
         public void FireProjectile()
         {
-            if (string.IsNullOrEmpty(projectilePrefabName) || !HasLivingTarget() || IsTargetBlockedByWall())
+            if (string.IsNullOrEmpty(projectilePrefabName))
                 return;
 
             float facingDirection = Animation != null

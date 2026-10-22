@@ -341,7 +341,8 @@ MonoBehaviour:
   <ParryActiveAnimationData>k__BackingField: {fileID: 11400000, guid: c25f3d592fb647d6b28209182b1153e8, type: 2}
   <ParrySuccessAnimationData>k__BackingField: {fileID: 11400000, guid: 6cf54d34fadd8d5448b151901fe598cc, type: 2}
   <ParryFailAnimationData>k__BackingField: {fileID: 11400000, guid: 6570c185b52f2554e86dc2155bea1c67, type: 2}
-  <GunAnimationData>k__BackingField: {fileID: 11400000, guid: f79f3960c4891944a8e320393252296b, type: 2}
+  <ReadyGunAnimationData>k__BackingField: {fileID: 11400000, guid: f79f3960c4891944a8e320393252296b, type: 2}
+  <ShootGunAnimationData>k__BackingField: {fileID: 11400000, guid: 595c5888c1af66c468467fdac3aa8bce, type: 2}
 --- !u!1 &4700750350944511643
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7958d990ed054dd9847c2b007d2c5866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Combat.Katana.KatanaWeapon
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: 6e7f2b2a71dc4a879a3bd9ef3c13269f, type: 2}
   attackPoint: {fileID: 7146817243235945896}
   enemyLayers:
     serializedVersion: 2
@@ -514,7 +516,7 @@ MonoBehaviour:
   katanaWeapon: {fileID: 9038599708249671329}
   gunSkill: {fileID: 5533067261354175101}
   maxGauge: 100
-  gaugePerKill: 20
+  gaugePerKill: 100
   gaugeSlider: {fileID: 7433536977781314888}
 --- !u!1 &7770334210381847858
 GameObject:
@@ -560,11 +562,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3336033014aa46e397e22bf96a801264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Combat.Gun.GunSkill
-  defaultGunData: {fileID: 11400000, guid: e14c8f07b39c45c6a13907cbb306fa30, type: 2}
+  <GunData>k__BackingField: {fileID: 11400000, guid: e14c8f07b39c45c6a13907cbb306fa30, type: 2}
   firePoint: {fileID: 2676394444992275920}
   enemyLayers:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 320
+  bulletLinePoolName: Particle_BulletLine
 --- !u!1 &7800880303205714880
 GameObject:
   m_ObjectHideFlags: 0
@@ -650,9 +653,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 268226093201870012}
     m_Modifications:
+    - target: {fileID: 597910436590753775, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 4220016933489238060, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 4956271698361810689, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
     - target: {fileID: 5028444978095311888, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
       propertyPath: m_Name
       value: InGame UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5206884164837387136, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 6005550050007312762, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005550050007312762, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1295216652659877552, guid: db977379f9f456b41968f017c966aa76, type: 3}
+    - target: {fileID: 6005550050007312762, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005550050007312762, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005550050007312762, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6393620737506416356, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
       propertyPath: m_Pivot.x
@@ -734,6 +773,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6436955499629048200, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
+    - target: {fileID: 8384589189111134106, guid: 5213d6e9437078d46bc570b89c35044d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -2135318406806826965, guid: df52cfd83e7447943a911812c7d6f1ad, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

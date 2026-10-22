@@ -137,6 +137,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.System.PoolSystems.PoolSystem
   pool:
-  - poolName: EnemyProjectile
+  - poolName: Projectile_NormalSoldier
     poolObject: {fileID: 100000, guid: 95bdf287a2564b37a387a2a596f2bdde, type: 3}
     initialPoolSize: 10
+  - poolName: Enemy_NormalSoldier
+    poolObject: {fileID: 1341764414263540965, guid: ead025f3611d0184496e9708771099e9, type: 3}
+    initialPoolSize: 15
+  - poolName: Particle_BulletLine
+    poolObject: {fileID: 5179498381484701269, guid: f6ebd85278f360d4ab682054fa04171b, type: 3}
+    initialPoolSize: 3
