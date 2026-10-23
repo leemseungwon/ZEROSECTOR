@@ -1,12 +1,13 @@
 using LSW._02._Code.Combat.Gun;
 using LSW._02._Code.Combat.Katana;
+using LSW._02._Code.System;
+using LSW._02._Code.System.HandlePlayerSystems;
+using LSW._02._Code.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
-namespace LSW._02._Code.Entity
+namespace LSW._02._Code.Entity.Players.Components
 {
-    public class EntityCombatComponent : MonoBehaviour, IEntityComponent
+    public class PlayerCombatComponent : MonoBehaviour, IEntityComponent
     {
         [Header("Weapons")]
         [SerializeField] private KatanaWeapon katanaWeapon;
@@ -14,11 +15,10 @@ namespace LSW._02._Code.Entity
         
         [Header("Gauge")] 
         [SerializeField] private float maxGauge = 100f;
-        [FormerlySerializedAs("gaugePerHit")]
         [SerializeField] private float gaugePerKill = 20f;
-        [SerializeField] private Slider gaugeSlider;
 
         private BaseEntity _owner;
+        private InGameUI _inGameUI;
         private float _currentGauge;
         private float _checkpointGauge;
 
@@ -33,6 +33,10 @@ namespace LSW._02._Code.Entity
             UnsubscribeEvents();
 
             _owner = owner;
+            if(SystemHandler.Instance.GetSystem(out HandlePlayerSystem playerSystem))
+            {
+                _inGameUI = playerSystem.InGameUI;
+            }
 
             maxGauge = Mathf.Max(1f, maxGauge);
             gaugePerKill = Mathf.Max(0f, gaugePerKill);
@@ -129,11 +133,10 @@ namespace LSW._02._Code.Entity
         private void UpdateGaugeUI()
         
         {
-            if (gaugeSlider == null)
+            if (_inGameUI == null)
                 return;
 
-            gaugeSlider.maxValue = maxGauge;
-            gaugeSlider.value = _currentGauge;
+            _inGameUI.UpdateGauge(CurrentGauge, MaxGauge);
         }
     }
 }

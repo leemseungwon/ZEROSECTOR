@@ -42,6 +42,8 @@ namespace LSW._02._Code.Entity.Enemy.States
                 _enemy.StateMachine.ChangeState(BaseEnemy.ChaseState);
                 return;
             }
+            
+            _enemy.FaceTarget();
 
             if (StateTimer >= _enemy.AttackCooldown)
                 _enemy.StateMachine.ChangeState(BaseEnemy.ChaseState);

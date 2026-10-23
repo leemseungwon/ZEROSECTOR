@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Entity.Enemy.BaseEnemy
   <StatData>k__BackingField: {fileID: 11400000, guid: 13c1d5b6ae5393b49b43b480e6d71495, type: 2}
-  detectionRange: 6
+  detectionRange: 8
   attackRange: 5
   attackHitRadius: 0.75
   attackHitOffset: {x: 0.7, y: 0}
@@ -180,7 +180,7 @@ MonoBehaviour:
   patrolDistance: 2
   idleDuration: 0.5
   attackCooldown: 3
-  projectilePrefabName: Projectile_NormalSoldier
+  projectilePoolName: Projectile_NormalSoldier
   projectileSpeed: 15
   projectileLifetime: 4
   firePoint: {fileID: 3816910752014985574}

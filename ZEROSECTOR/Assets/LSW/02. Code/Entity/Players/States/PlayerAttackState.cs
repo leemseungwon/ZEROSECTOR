@@ -1,4 +1,5 @@
 using System;
+using LSW._02._Code.Entity.Players.Components;
 using UnityEngine;
 
 namespace LSW._02._Code.Entity.Players.States
@@ -7,7 +8,7 @@ namespace LSW._02._Code.Entity.Players.States
     {
         private readonly PlayerController _player;
         private readonly PlayerAnimation _animation;
-        private readonly EntityCombatComponent _combat;
+        private readonly PlayerCombatComponent _combat;
 
         public PlayerAttackState(PlayerController player) : base(player)
         {

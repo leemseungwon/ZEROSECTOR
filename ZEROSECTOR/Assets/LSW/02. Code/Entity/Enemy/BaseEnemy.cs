@@ -33,7 +33,7 @@ namespace LSW._02._Code.Entity.Enemy
 
         [Header("Combat")]
         [SerializeField, Min(0f)] private float attackCooldown = 1f;
-        [SerializeField] private string projectilePrefabName;
+        [SerializeField] private string projectilePoolName;
         [SerializeField, Min(0f)] private float projectileSpeed = 8f;
         [SerializeField, Min(0.01f)] private float projectileLifetime = 4f;
         [SerializeField] private Transform firePoint;
@@ -41,6 +41,7 @@ namespace LSW._02._Code.Entity.Enemy
         private PoolSystem _poolSystem;
         private BaseEnemyAnimation _baseEnemyAnimation;
         private PlayerController _targetPlayer;
+        private EnemyProjectile _launchProjectile;
         private Collider2D _collider;
         private Vector3 _initialPosition;
         private Vector3 _initialVisualScale;
@@ -279,7 +280,7 @@ namespace LSW._02._Code.Entity.Enemy
 
         public void FireProjectile()
         {
-            if (string.IsNullOrEmpty(projectilePrefabName))
+            if (string.IsNullOrEmpty(projectilePoolName))
                 return;
 
             float facingDirection = Animation != null
@@ -294,8 +295,9 @@ namespace LSW._02._Code.Entity.Enemy
             if (direction.sqrMagnitude <= 0.0001f)
                 return;
 
-            if (_poolSystem != null && _poolSystem.SpawnPool(projectilePrefabName, out EnemyProjectile projectile))
+            if (_poolSystem != null && _poolSystem.SpawnPool(projectilePoolName, out EnemyProjectile projectile))
             {
+                _launchProjectile = projectile;
                 projectile.Launch(
                     this, spawnPosition, direction.normalized, projectileSpeed, projectileLifetime);
             }
@@ -306,9 +308,14 @@ namespace LSW._02._Code.Entity.Enemy
             if (Animation != null && _baseEnemyAnimation != null && _baseEnemyAnimation.AttackAnimationData != null)
                 Animation.SetParam(_baseEnemyAnimation.AttackAnimationData);
         }
-
+        
         public void PlayDeadAnimation()
         {
+            if (_launchProjectile != null)
+            {
+                _poolSystem.DespawnPool(projectilePoolName, _launchProjectile);
+                _launchProjectile = null;
+            }
             if (Animation != null && _baseEnemyAnimation != null && _baseEnemyAnimation.DeadAnimationData != null)
                 Animation.SetParam(_baseEnemyAnimation.DeadAnimationData);
         }

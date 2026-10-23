@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LSW._02._Code.Common;
+using LSW._02._Code.Entity.Players.Components;
 using LSW._02._Code.Sos.EntityStatDatas;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ namespace LSW._02._Code.Entity
         private Coroutine _knockbackCoroutine;
         private const float KnockbackDuration = 0.05f;
 
-        public event Action OnDeathEvent;
+        public event Action<BaseEntity> OnDeathEvent;
         public event Action<BaseEntity> OnKilledBy;
         public event Action<BaseEntity> OnEnemyKilled;
 
@@ -178,7 +179,7 @@ namespace LSW._02._Code.Entity
                 return;
 
             IsDead = true;
-            OnDeathEvent?.Invoke();
+            OnDeathEvent?.Invoke(this);
             OnKilledBy?.Invoke(attacker);
             attacker?.OnEnemyKilled?.Invoke(this);
         }
@@ -193,7 +194,7 @@ namespace LSW._02._Code.Entity
 
             if (GetCompo(out EntityBuffComponent buff))
                 buff.Reset();
-            if (GetCompo(out EntityCombatComponent combat))
+            if (GetCompo(out PlayerCombatComponent combat))
                 combat.ResetForRoom();
         }
 

@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using LSW._02._Code.Common;
+using LSW._02._Code.Entity.Players.Components;
 using LSW._02._Code.Entity.Players.States;
 using LSW._02._Code.Sos;
 using LSW._02._Code.Sos.EntityStatDatas;
@@ -75,7 +76,7 @@ namespace LSW._02._Code.Entity.Players
         private bool _parrySucceeded;
         private BaseEntity _counterDashTarget;
         private float _facingDirection = 1f;
-        private EntityCombatComponent _combat;
+        private PlayerCombatComponent _combat;
         private PlayerAnimation _playerAnimation;
         private readonly RaycastHit2D[] _dashHitBuffer = new RaycastHit2D[16];
 

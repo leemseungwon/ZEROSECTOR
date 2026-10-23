@@ -1,4 +1,7 @@
 using System;
+using LSW._02._Code.System;
+using LSW._02._Code.System.HandlePlayerSystems;
+using LSW._02._Code.UI;
 using UnityEngine;
 
 namespace LSW._02._Code.Entity.Players.States
@@ -6,6 +9,7 @@ namespace LSW._02._Code.Entity.Players.States
     public class PlayerUseGunState : EntityState
     {
         private readonly PlayerController _player;
+        private readonly InGameUI _inGameUI;
         private readonly PlayerAnimation _animation;
 
         private float _readyShootTimer;
@@ -19,6 +23,11 @@ namespace LSW._02._Code.Entity.Players.States
             if (_player.Animation != null && _player.Animation is PlayerAnimation animation)
             {
                 _animation = animation;
+            }
+
+            if (SystemHandler.Instance.GetSystem(out HandlePlayerSystem playerSystem))
+            {
+                _inGameUI = playerSystem.InGameUI;
             }
         }
 
@@ -40,6 +49,9 @@ namespace LSW._02._Code.Entity.Players.States
             {
                 _animation.OnGunAnimationEnd += GunAnimationEnd;
             }
+            
+            if(_inGameUI != null)
+                _inGameUI.ShowPoint(_readyShootDuration);
             
             _player.Rigidbody.linearVelocity = Vector3.zero;
 
