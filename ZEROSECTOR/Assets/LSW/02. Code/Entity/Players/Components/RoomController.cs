@@ -85,7 +85,7 @@ namespace LSW._02._Code.Entity.Players.Components
             _isCutsceneActive = active;
         }
 
-        private void HandlePlayerDeath()
+        private void HandlePlayerDeath(BaseEntity _)
         {
             if (Room.ActiveRoom != null)
                 return;

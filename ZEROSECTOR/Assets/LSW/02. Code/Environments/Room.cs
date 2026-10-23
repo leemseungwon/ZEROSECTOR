@@ -6,7 +6,9 @@ using LSW._02._Code.Entity.Enemy;
 using LSW._02._Code.Entity.Players;
 using LSW._02._Code.Entity.Players.Components;
 using LSW._02._Code.System;
+using LSW._02._Code.System.HandlePlayerSystems;
 using LSW._02._Code.System.PoolSystems;
+using LSW._02._Code.UI;
 using UnityEngine;
 
 namespace LSW._02._Code.Environments
@@ -28,6 +30,7 @@ namespace LSW._02._Code.Environments
 
         private readonly List<BaseEnemy> _spawnedEnemies = new();
         private PlayerController _player;
+        private InGameUI _inGameUI;
         private PoolSystem _poolSystem;
         private Coroutine _restartCoroutine;
         private bool _isCutsceneActive;
@@ -62,6 +65,11 @@ namespace LSW._02._Code.Environments
                 if (triggerListener == null)
                     triggerListener = roomCollider.gameObject.AddComponent<RoomTriggerListener>();
                 triggerListener.Initialize(this);
+            }
+
+            if (SystemHandler.Instance.GetSystem(out HandlePlayerSystem playerSystem))
+            {
+                _inGameUI = playerSystem.InGameUI;
             }
         }
 
@@ -132,7 +140,7 @@ namespace LSW._02._Code.Environments
                 ActiveRoom = null;
         }
 
-        private void HandlePlayerDeath()
+        private void HandlePlayerDeath(BaseEntity _)
         {
             if (_restartCoroutine == null)
                 _restartCoroutine = StartCoroutine(RestartRoom());
@@ -188,29 +196,47 @@ namespace LSW._02._Code.Environments
             {
                 if (enemy == null || string.IsNullOrWhiteSpace(enemy.poolName) || enemy.spawnPoint == null)
                 {
-                    Debug.LogError($"Room {name} has an enemy spawn without a pool name or spawn point.", this);
                     continue;
                 }
 
                 if (_poolSystem == null || !_poolSystem.SpawnPool(enemy.poolName, out BaseEnemy spawnedEnemy))
                 {
-                    Debug.LogError($"Room {name} could not spawn enemy pool '{enemy.poolName}'.", this);
                     continue;
                 }
 
+                spawnedEnemy.OnDeathEvent += HandleEnemyDeath;
                 spawnedEnemy.ResetForRoom(enemy.spawnPoint.position);
                 _spawnedEnemies.Add(spawnedEnemy);
             }
+            
+            if(_inGameUI != null)
+                _inGameUI.CreateEnemyArrows(_spawnedEnemies, IsCleared);
         }
 
+        private void HandleEnemyDeath(BaseEntity entity)
+        {
+            if (entity is BaseEnemy enemy)
+                ClearEnemyArrow(enemy);
+        }
+
+        public void ClearEnemyArrow(BaseEnemy enemy)
+        {
+            if (_inGameUI != null)
+                _inGameUI.ClearEnemyArrow(enemy);
+        }
         private void DespawnEnemies()
         {
             foreach (BaseEnemy enemy in _spawnedEnemies)
             {
-                if (enemy != null)
-                    enemy.DespawnFromRoom();
+                if (enemy == null)
+                    continue;
+
+                enemy.OnDeathEvent -= HandleEnemyDeath;
+                enemy.DespawnFromRoom();
             }
 
+            if(_inGameUI != null)
+                _inGameUI.ClearEnemyArrows();
             _spawnedEnemies.Clear();
         }
         
@@ -249,7 +275,9 @@ namespace LSW._02._Code.Environments
             {
                 roomDoor.OpenDoor();
             }
-
+            
+            if(_inGameUI != null)
+                _inGameUI.ClearEnemyArrows();
             OnRoomCleared?.Invoke();
         }
 

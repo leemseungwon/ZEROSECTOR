@@ -27,7 +27,7 @@ namespace LSW._02._Code.Entity
         private Coroutine _knockbackCoroutine;
         private const float KnockbackDuration = 0.05f;
 
-        public event Action OnDeathEvent;
+        public event Action<BaseEntity> OnDeathEvent;
         public event Action<BaseEntity> OnKilledBy;
         public event Action<BaseEntity> OnEnemyKilled;
 
@@ -179,7 +179,7 @@ namespace LSW._02._Code.Entity
                 return;
 
             IsDead = true;
-            OnDeathEvent?.Invoke();
+            OnDeathEvent?.Invoke(this);
             OnKilledBy?.Invoke(attacker);
             attacker?.OnEnemyKilled?.Invoke(this);
         }
