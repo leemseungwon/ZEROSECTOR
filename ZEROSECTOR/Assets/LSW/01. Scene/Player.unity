@@ -2067,15 +2067,7 @@ MonoBehaviour:
   roomCollider: {fileID: 996551573}
   restartDelay: 0.35
   playerRespawnPoint: {fileID: 2048924792}
-  enemies:
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 542121935}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 1980677982}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 1718202164}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 1656290036}
+  enemies: []
   roomDoor: {fileID: 2093837045}
 --- !u!156049354 &996551575
 Grid:
@@ -13632,8 +13624,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1247313419}
   - component: {fileID: 1247313420}
-  - component: {fileID: 1247313423}
   - component: {fileID: 1247313424}
+  - component: {fileID: 1247313425}
   m_Layer: 0
   m_Name: Room_1
   m_TagString: Untagged
@@ -13670,35 +13662,6 @@ Grid:
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
   m_CellSwizzle: 0
---- !u!114 &1247313423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1247313418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b3436543a1a4a04ad7dff2ec4c93e72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Entity.Rooms.Room
-  roomCollider: {fileID: 1247313424}
-  restartDelay: 0.35
-  playerRespawnPoint: {fileID: 2098110646}
-  enemies:
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 185189151}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 1219521461}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 1890868353}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 2016886844}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 1222734712}
-  - poolName: Enemy_NormalSoldier
-    spawnPoint: {fileID: 131366180}
-  roomDoor: {fileID: 409569821}
 --- !u!61 &1247313424
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -13745,6 +13708,24 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 42, y: 15}
   m_EdgeRadius: 0
+--- !u!114 &1247313425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247313418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7b203d02a264d0ca101fe8b1f7e7e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Environments.BossRoom
+  roomCollider: {fileID: 1247313424}
+  restartDelay: 0.35
+  playerRespawnPoint: {fileID: 2098110646}
+  bossPoolName: Boss_Guard
+  bossSpawnPoint: {fileID: 131366180}
+  roomDoor: {fileID: 409569821}
 --- !u!1 &1278684089
 GameObject:
   m_ObjectHideFlags: 0
@@ -19716,6 +19697,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1048170956133145900, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
+      propertyPath: <AttackAnimationData>k__BackingField
+      value: 
+      objectReference: {fileID: 11400000, guid: 881e37dadfee1f746a0503336b82fb17, type: 2}
     - target: {fileID: 1463133293248736743, guid: ee3d8723832e24a49928c68685b8252a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -19936,22 +19921,6 @@ PrefabInstance:
     - target: {fileID: 3821785516209557194, guid: 2024490ec79131549952f213d8959ea3, type: 3}
       propertyPath: m_Name
       value: InGame System
-      objectReference: {fileID: 0}
-    - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
-      propertyPath: pool.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
-      propertyPath: pool.Array.data[3].poolName
-      value: UI_EnemyDirectionArrow
-      objectReference: {fileID: 0}
-    - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
-      propertyPath: pool.Array.data[3].poolObject
-      value: 
-      objectReference: {fileID: 6565321667144710080, guid: 072c6b111ab94ab4f87fd1f7819e4118, type: 3}
-    - target: {fileID: 5087872941009733620, guid: 2024490ec79131549952f213d8959ea3, type: 3}
-      propertyPath: pool.Array.data[3].initialPoolSize
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5712788458882781887, guid: 2024490ec79131549952f213d8959ea3, type: 3}
       propertyPath: inGameUI

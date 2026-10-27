@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace LSW._02._Code.Entity.Enemy
 {
-    public class BaseEnemy : BaseEntity, IPoolable
+    public abstract class BaseEnemy : BaseEntity, IPoolable
     {
         public const string IdleState = "EnemyIdleState";
         public const string AttackState = "EnemyAttackState";
@@ -21,9 +21,6 @@ namespace LSW._02._Code.Entity.Enemy
         [Header("Target")]
         [SerializeField, Min(0f)] private float detectionRange = 6f;
         [SerializeField, Min(0f)] private float attackRange = 1f;
-        [SerializeField, Min(0f)] private float attackHitRadius = 1.2f;
-        [SerializeField] private Vector2 attackHitOffset = new(0.7f, 0.25f);
-        [SerializeField] private LayerMask attackHitLayers = 1 << 7;
         [SerializeField] private LayerMask wallLayers = (1 << 0) | (1 << 6);
 
         [Header("Patrol")]
@@ -33,15 +30,10 @@ namespace LSW._02._Code.Entity.Enemy
 
         [Header("Combat")]
         [SerializeField, Min(0f)] private float attackCooldown = 1f;
-        [SerializeField] private string projectilePoolName;
-        [SerializeField, Min(0f)] private float projectileSpeed = 8f;
-        [SerializeField, Min(0.01f)] private float projectileLifetime = 4f;
-        [SerializeField] private Transform firePoint;
 
         private PoolSystem _poolSystem;
         private BaseEnemyAnimation _baseEnemyAnimation;
         private PlayerController _targetPlayer;
-        private EnemyProjectile _launchProjectile;
         private Collider2D _collider;
         private Vector3 _initialPosition;
         private Vector3 _initialVisualScale;
@@ -253,55 +245,7 @@ namespace LSW._02._Code.Entity.Enemy
             FaceDirection(_targetPlayer.transform.position.x - transform.position.x);
         }
 
-        public void AttackTarget()
-        {
-            if (!HasLivingTarget() || IsTargetBlockedByWall())
-                return;
-
-            float facingDirection = Animation != null
-                ? Mathf.Sign(Animation.transform.localScale.x)
-                : Mathf.Sign(_initialVisualScale.x);
-            Vector2 attackCenter = (Vector2)transform.position +
-                                   new Vector2(attackHitOffset.x * facingDirection, attackHitOffset.y);
-            Collider2D[] hits = Physics2D.OverlapCircleAll(
-                attackCenter,
-                attackHitRadius,
-                attackHitLayers);
-
-            foreach (Collider2D hit in hits)
-            {
-                if (hit.GetComponentInParent<PlayerController>() != _targetPlayer)
-                    continue;
-
-                _targetPlayer.ReceiveHit(this);
-                return;
-            }
-        }
-
-        public void FireProjectile()
-        {
-            if (string.IsNullOrEmpty(projectilePoolName))
-                return;
-
-            float facingDirection = Animation != null
-                ? Mathf.Sign(Animation.transform.localScale.x)
-                : Mathf.Sign(_initialVisualScale.x);
-            Vector2 spawnPosition = firePoint != null
-                ? firePoint.position
-                : (Vector2)transform.position + new Vector2(attackHitOffset.x * facingDirection, attackHitOffset.y);
-            Vector2 direction = (Vector2)_targetPlayer.transform.position - spawnPosition;
-            direction.y += 0.5f;
-            
-            if (direction.sqrMagnitude <= 0.0001f)
-                return;
-
-            if (_poolSystem != null && _poolSystem.SpawnPool(projectilePoolName, out EnemyProjectile projectile))
-            {
-                _launchProjectile = projectile;
-                projectile.Launch(
-                    this, spawnPosition, direction.normalized, projectileSpeed, projectileLifetime);
-            }
-        }
+        public abstract void AttackTarget();
 
         public void PlayAttackAnimation()
         {
@@ -309,13 +253,8 @@ namespace LSW._02._Code.Entity.Enemy
                 Animation.SetParam(_baseEnemyAnimation.AttackAnimationData);
         }
         
-        public void PlayDeadAnimation()
+        public virtual void PlayDeadAnimation()
         {
-            if (_launchProjectile != null)
-            {
-                _poolSystem.DespawnPool(projectilePoolName, _launchProjectile);
-                _launchProjectile = null;
-            }
             if (Animation != null && _baseEnemyAnimation != null && _baseEnemyAnimation.DeadAnimationData != null)
                 Animation.SetParam(_baseEnemyAnimation.DeadAnimationData);
         }
@@ -383,7 +322,10 @@ namespace LSW._02._Code.Entity.Enemy
             }
         }
 
-        private void CachePoolSystem()
+        protected PoolSystem PoolSystem => _poolSystem;
+        protected float InitialFacingDirection => Mathf.Sign(_initialVisualScale.x);
+
+        protected void CachePoolSystem()
         {
             if (_poolSystem != null)
                 return;
@@ -391,17 +333,6 @@ namespace LSW._02._Code.Entity.Enemy
             SystemHandler handler = SystemHandler.Instance;
             if (handler != null)
                 handler.GetSystem(out _poolSystem);
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            float facingDirection = Animation != null
-                ? Mathf.Sign(Animation.transform.localScale.x)
-                : 1f;
-            Vector2 attackCenter = (Vector2)transform.position +
-                                   new Vector2(attackHitOffset.x * facingDirection, attackHitOffset.y);
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackCenter, attackHitRadius);
         }
     }
 }

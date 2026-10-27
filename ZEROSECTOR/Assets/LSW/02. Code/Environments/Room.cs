@@ -101,6 +101,9 @@ namespace LSW._02._Code.Environments
             if (ActiveRoom == this)
                 return;
 
+            if (BossRoom.ActiveRoom != null)
+                BossRoom.ActiveRoom.DeactivateFromTransition();
+
             if (ActiveRoom != null)
                 ActiveRoom.Deactivate();
 
@@ -138,6 +141,11 @@ namespace LSW._02._Code.Environments
 
             if (ActiveRoom == this)
                 ActiveRoom = null;
+        }
+
+        public void DeactivateFromTransition()
+        {
+            Deactivate();
         }
 
         private void HandlePlayerDeath(BaseEntity _)
