@@ -21,6 +21,7 @@ namespace LSW._02._Code.Entity.Players
         [SerializeField] private Transform groundCheck;
         [SerializeField] private float groundCheckRadius = 0.15f;
         [SerializeField] private LayerMask groundLayer;
+        [SerializeField, Range(0f, 80f)] private float maxWalkableSlopeAngle = 55f;
 
         [Header("Jump")]
         [SerializeField, Min(1)] private int maxJumpCount = 2;
@@ -78,6 +79,9 @@ namespace LSW._02._Code.Entity.Players
         private float _facingDirection = 1f;
         private PlayerCombatComponent _combat;
         private PlayerAnimation _playerAnimation;
+        private Collider2D _bodyCollider;
+        private Vector2 _groundNormal = Vector2.up;
+        private readonly RaycastHit2D[] _groundHitBuffer = new RaycastHit2D[8];
         private readonly RaycastHit2D[] _dashHitBuffer = new RaycastHit2D[16];
 
         public const string IdleState = "PlayerIdleState";
@@ -93,6 +97,7 @@ namespace LSW._02._Code.Entity.Players
         {
             base.Awake();
             Rigidbody.gravityScale = 0f;
+            _bodyCollider = GetComponent<Collider2D>();
 
             if (inputData == null)
             {
@@ -135,7 +140,7 @@ namespace LSW._02._Code.Entity.Players
         {
             base.FixedUpdate();
 
-            CheckGround();
+            CheckGround(true);
 
             Vector2 velocity = Rigidbody.linearVelocity;
             if (IsDashing)
@@ -151,7 +156,19 @@ namespace LSW._02._Code.Entity.Players
 
             if (IsGrounded && !isJumping)
             {
-                velocity.y = 0f;
+                float input = IsParrying ? 0f : MoveInput;
+                if (Mathf.Abs(input) > 0.01f)
+                {
+                    Vector2 slopeTangent = new Vector2(_groundNormal.y, -_groundNormal.x).normalized;
+                    if (slopeTangent.x * input < 0f)
+                        slopeTangent = -slopeTangent;
+
+                    velocity = slopeTangent * (CurrentMoveSpeed * Mathf.Abs(input));
+                }
+                else
+                {
+                    velocity.y = 0f;
+                }
             }
             else
             {
@@ -315,24 +332,22 @@ namespace LSW._02._Code.Entity.Players
             RaycastHit2D hit = GetDashBlockingHit(
                 bodyCollider, castOrigin, direction, distance);
 
-            float travelDistance = distance;
             bool hitEnemy = false;
             if (hit.collider != null)
             {
                 BaseEntity target = hit.collider.GetComponentInParent<BaseEntity>();
                 if (target != null && target != this && !target.IsDead)
                 {
-                    travelDistance = Mathf.Max(0f, hit.distance - 0.02f);
                     hitEnemy = _combat != null && _combat.DashAttack(target);
-                }
-                else
-                {
-                    travelDistance = Mathf.Max(0f, hit.distance - 0.02f);
                 }
             }
 
-            Rigidbody.position += direction * travelDistance;
-            Rigidbody.linearVelocity = new Vector2(0f, Rigidbody.linearVelocity.y);
+            MoveDashSafely(bodyCollider, direction * distance, out bool blockedVertical);
+            Vector2 velocity = Rigidbody.linearVelocity;
+            velocity.x = 0f;
+            if (blockedVertical)
+                velocity.y = 0f;
+            Rigidbody.linearVelocity = velocity;
 
             if (Mathf.Abs(direction.x) > 0.01f)
             {
@@ -376,25 +391,17 @@ namespace LSW._02._Code.Entity.Players
 
                 Collider2D playerCollider = GetComponent<Collider2D>();
                 Collider2D targetCollider = target.GetComponent<Collider2D>();
-                
-                float standOff = playerCollider.bounds.extents.x + targetCollider.bounds.extents.x + 0.02f;
-                
-                Vector2 destination = new Vector2(target.transform.position.x - direction * standOff, target.transform.position.y);
-                Vector2 delta = destination - Rigidbody.position;
-                
-                float distance = delta.magnitude;
-                Vector2 dashDirection = distance > 0.0001f ? delta / distance : Vector2.right * direction;
-                
-                Vector2 castOrigin = playerCollider != null ? playerCollider.bounds.center
-                    : Rigidbody.position;
-                
-                RaycastHit2D hit = GetDashBlockingHit(
-                    playerCollider, castOrigin, dashDirection, distance);
-                
-                float travelDistance = hit.collider != null ? Mathf.Max(0f, hit.distance - 0.02f)
-                    : distance;
 
-                Rigidbody.position += dashDirection * travelDistance;
+                float playerHalfWidth = playerCollider != null ? playerCollider.bounds.extents.x : dashHitRadius;
+                float targetHalfWidth = targetCollider != null ? targetCollider.bounds.extents.x : 0f;
+                float standOff = playerHalfWidth + targetHalfWidth + 0.02f;
+
+                Vector2 destination = new Vector2(
+                    target.transform.position.x - direction * standOff,
+                    target.transform.position.y);
+
+                Rigidbody.position = destination;
+                Physics2D.SyncTransforms();
                 Rigidbody.linearVelocity = Vector2.zero;
                 _facingDirection = direction;
 
@@ -406,15 +413,7 @@ namespace LSW._02._Code.Entity.Players
                         _initialScale.z);
                 }
 
-                BaseEntity hitTarget = hit.collider != null ? hit.collider.GetComponentInParent<BaseEntity>()
-                    : null;
-                bool blockedByWall = hit.collider != null &&
-                                     (hitTarget == null || hitTarget == this);
-                if (!blockedByWall &&
-                    (hitTarget == target || hit.collider == null))
-                {
-                    hitEnemy = _combat != null && _combat.DashAttack(target);
-                }
+                hitEnemy = _combat != null && _combat.DashAttack(target);
             }
 
             if (Animation is PlayerAnimation playerAnimation)
@@ -456,11 +455,10 @@ namespace LSW._02._Code.Entity.Players
                 if (target == this || (target != null && target.IsDead))
                     continue;
 
-                bool isGroundContactDuringHorizontalDash =
-                    IsGrounded &&
-                    Mathf.Abs(direction.y) <= 0.01f &&
-                    hit.normal.y > 0.5f;
-                if (isGroundContactDuringHorizontalDash)
+                bool isGroundContactAlongOrAwayFromSurface =
+                    hit.normal.y > 0.5f &&
+                    Vector2.Dot(direction, hit.normal) >= -0.01f;
+                if (isGroundContactAlongOrAwayFromSurface)
                     continue;
 
                 if (closestHit.collider == null || hit.distance < closestHit.distance)
@@ -468,6 +466,38 @@ namespace LSW._02._Code.Entity.Players
             }
 
             return closestHit;
+        }
+
+        private void MoveDashSafely(Collider2D bodyCollider, Vector2 displacement, out bool blockedVertical)
+        {
+            blockedVertical = false;
+
+            Vector2 position = Rigidbody.position;
+            float horizontalDistance = Mathf.Abs(displacement.x);
+            if (horizontalDistance > 0.0001f)
+            {
+                Vector2 direction = Vector2.right * Mathf.Sign(displacement.x);
+                Vector2 castOrigin = bodyCollider != null ? bodyCollider.bounds.center : position;
+                RaycastHit2D hit = GetDashBlockingHit(bodyCollider, castOrigin, direction, horizontalDistance);
+                float travel = hit.collider != null
+                    ? Mathf.Max(0f, hit.distance - 0.02f)
+                    : horizontalDistance;
+                Rigidbody.position = position + direction * travel;
+                Physics2D.SyncTransforms();
+            }
+
+            float verticalDistance = Mathf.Abs(displacement.y);
+            if (verticalDistance > 0.0001f)
+            {
+                Vector2 direction = Vector2.up * Mathf.Sign(displacement.y);
+                Vector2 castOrigin = bodyCollider != null ? bodyCollider.bounds.center : Rigidbody.position;
+                RaycastHit2D hit = GetDashBlockingHit(bodyCollider, castOrigin, direction, verticalDistance);
+                float travel = hit.collider != null
+                    ? Mathf.Max(0f, hit.distance - 0.02f)
+                    : verticalDistance;
+                blockedVertical = hit.collider != null;
+                Rigidbody.position += direction * travel;
+            }
         }
 
         private void StartParry()
@@ -518,23 +548,68 @@ namespace LSW._02._Code.Entity.Players
 
         private void CheckGround()
         {
-            if (groundCheck == null)
-            {
-                IsGrounded = false;
-                return;
-            }
+            CheckGround(false);
+        }
 
-            IsGrounded = Physics2D.OverlapCircle(
-                groundCheck.position,
-                groundCheckRadius,
-                groundLayer
-            );
+        private void CheckGround(bool snapToSurface)
+        {
+            bool hasGroundBelow = TryGetGroundHit(out RaycastHit2D groundHit);
+            _groundNormal = hasGroundBelow ? groundHit.normal : Vector2.up;
+            IsGrounded = hasGroundBelow && groundHit.distance <= 0.1f;
+
+            bool isJumping = StateMachine != null && StateMachine.CurrentState.HasValue &&
+                             StateMachine.CurrentState.Value.stateName == JumpState;
+            bool shouldFollowGround = snapToSurface && hasGroundBelow &&
+                                      groundHit.distance <= groundCheckRadius &&
+                                      !IsDashing && !isJumping && Mathf.Abs(MoveInput) > 0.01f;
+            if (shouldFollowGround)
+            {
+                if (groundHit.distance > 0.005f)
+                    Rigidbody.position += Vector2.down * groundHit.distance;
+
+                Vector2 velocity = Rigidbody.linearVelocity;
+                velocity.y = 0f;
+                Rigidbody.linearVelocity = velocity;
+                IsGrounded = true;
+            }
 
             if (Animation is PlayerAnimation playerAnimation)
                 playerAnimation.SetGrounded(IsGrounded);
 
             if (IsGrounded && Rigidbody.linearVelocity.y <= 0f)
                 _jumpCount = 0;
+        }
+
+        private bool TryGetGroundHit(out RaycastHit2D groundHit)
+        {
+            groundHit = default;
+            if (_bodyCollider == null)
+                _bodyCollider = GetComponent<Collider2D>();
+
+            if (_bodyCollider == null)
+                return false;
+
+            float castDistance = Mathf.Max(groundCheckRadius, 0.05f) + 0.1f;
+            float minNormalY = Mathf.Cos(maxWalkableSlopeAngle * Mathf.Deg2Rad);
+
+            var filter = new ContactFilter2D();
+            filter.SetLayerMask(groundLayer);
+            filter.useTriggers = false;
+            int hitCount = _bodyCollider.Cast(Vector2.down, filter, _groundHitBuffer, castDistance);
+            for (int i = 0; i < hitCount; i++)
+                ConsiderGroundHit(_groundHitBuffer[i], minNormalY, ref groundHit);
+
+            return groundHit.collider != null;
+        }
+
+        private static void ConsiderGroundHit(RaycastHit2D candidate, float minNormalY,
+            ref RaycastHit2D closestHit)
+        {
+            if (candidate.collider == null || candidate.collider.isTrigger || candidate.normal.y < minNormalY)
+                return;
+
+            if (closestHit.collider == null || candidate.distance < closestHit.distance)
+                closestHit = candidate;
         }
 
         public void Move()
@@ -549,7 +624,11 @@ namespace LSW._02._Code.Entity.Players
         
         private void UpdateFacingDirection()
         {
-            if (Animation == null || IsDashing)
+            bool isAttackAnimationPlaying =
+                StateMachine?.CurrentState?.stateName == AttackState ||
+                _playerAnimation != null && _playerAnimation.IsDashAttackAnimationPlaying;
+
+            if (Animation == null || IsDashing || isAttackAnimationPlaying)
                 return;
 
             float directionX;
@@ -586,18 +665,8 @@ namespace LSW._02._Code.Entity.Players
 
             if (IsParrying)
             {
-                Vector2 toAttacker = attacker != null
-                    ? (Vector2)attacker.transform.position - (Vector2)transform.position
-                    : Vector2.zero;
-                bool attackerIsInFront =
-                    toAttacker.sqrMagnitude > 0f &&
-                    Vector2.Dot(toAttacker.normalized, Vector2.right * _facingDirection) > 0f;
-
-                if (attackerIsInFront)
-                {
-                    StartCounterDash(attacker);
-                    return true;
-                }
+                StartCounterDash(attacker);
+                return true;
             }
             
             Rigidbody.linearVelocity = Vector2.zero;

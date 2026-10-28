@@ -12,6 +12,7 @@ namespace LSW._02._Code.UI
         [SerializeField] private Image arrowImage;
 
         private RectTransform _rectTransform;
+        private Vector3 _initialLocalScale;
         private Canvas _canvas;
         private Camera _targetCamera;
         private Transform _target;
@@ -19,6 +20,7 @@ namespace LSW._02._Code.UI
         public void Initialize()
         {
             _rectTransform = GetComponent<RectTransform>();
+            _initialLocalScale = _rectTransform.localScale;
 
             if (arrowImage == null)
                 arrowImage = GetComponent<Image>();
@@ -26,6 +28,11 @@ namespace LSW._02._Code.UI
 
         public void Spawn()
         {
+            // PoolSystem reparents pooled objects. Restore the prefab scale so
+            // parent scale changes cannot accumulate across room activations.
+            if (_rectTransform != null)
+                _rectTransform.localScale = _initialLocalScale;
+
             if (arrowImage != null)
                 arrowImage.enabled = true;
         }
@@ -44,6 +51,10 @@ namespace LSW._02._Code.UI
             {
                 transform.SetParent(canvas.transform, false);
             }
+
+            // SetParent(false) preserves the existing local values. Reapply the
+            // authored scale after changing from the pool hierarchy to the UI.
+            _rectTransform.localScale = _initialLocalScale;
             
             if (arrowImage != null)
                 arrowImage.enabled = true;

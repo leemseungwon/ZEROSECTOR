@@ -20,6 +20,9 @@ namespace LSW._02._Code.Environments
         {
             public string poolName;
             public Transform spawnPoint;
+            public bool patrolWhenIdle = true;
+            [Min(0f)] public float patrolDistance = 2f;
+            [Min(0f)] public float idleDuration = 0.5f;
         }
 
         [SerializeField] private Collider2D roomCollider;
@@ -101,6 +104,9 @@ namespace LSW._02._Code.Environments
             if (ActiveRoom == this)
                 return;
 
+            if (BossRoom.ActiveRoom != null)
+                BossRoom.ActiveRoom.DeactivateFromTransition();
+
             if (ActiveRoom != null)
                 ActiveRoom.Deactivate();
 
@@ -138,6 +144,11 @@ namespace LSW._02._Code.Environments
 
             if (ActiveRoom == this)
                 ActiveRoom = null;
+        }
+
+        public void DeactivateFromTransition()
+        {
+            Deactivate();
         }
 
         private void HandlePlayerDeath(BaseEntity _)
@@ -204,6 +215,7 @@ namespace LSW._02._Code.Environments
                     continue;
                 }
 
+                spawnedEnemy.ConfigurePatrol(enemy.patrolWhenIdle, enemy.patrolDistance, enemy.idleDuration);
                 spawnedEnemy.OnDeathEvent += HandleEnemyDeath;
                 spawnedEnemy.ResetForRoom(enemy.spawnPoint.position);
                 _spawnedEnemies.Add(spawnedEnemy);
