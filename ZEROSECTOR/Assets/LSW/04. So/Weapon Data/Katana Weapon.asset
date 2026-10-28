@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a9f0bc721a74914bcde41a508cb759e, type: 3}
   m_Name: Katana Weapon
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Sos.WeaponData
-  displayName: Katana
   weaponType: 0
   attackRadius: 0.5
-  range: 30
   attackCooldown: 0.5
+  selfKnockbackPower: 0

@@ -7,7 +7,8 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
     {
         protected readonly GuardBoss Boss;
         protected GuardBossCombatComponent Combat => Boss.Combat;
-        protected virtual bool AllowsHorizontalMovement => false;
+        protected bool HasAttackAnimationEnded { get; private set; }
+        protected virtual bool AllowsAttackMovement => false;
 
         protected GuardBossAttackState(GuardBoss boss) : base(boss)
         {
@@ -17,28 +18,42 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
         public override void Enter(Action endAction = null)
         {
             base.Enter(endAction);
-            if (!AllowsHorizontalMovement)
-                Boss.Movement?.StopHorizontal();
-            Boss.FaceTarget();
+            HasAttackAnimationEnded = false;
+            Boss.Movement?.StopHorizontal();
             if (Boss.BossAnimation != null)
+            {
                 Boss.BossAnimation.OnAttackCast += HandleAttackCast;
+                Boss.BossAnimation.OnAttackAnimationEnd += HandleAttackAnimationEnd;
+            }
         }
 
         public override void Exit()
         {
+            Boss.Movement?.EndAirDash();
             if (Boss.BossAnimation != null)
+            {
                 Boss.BossAnimation.OnAttackCast -= HandleAttackCast;
+                Boss.BossAnimation.OnAttackAnimationEnd -= HandleAttackAnimationEnd;
+            }
             base.Exit();
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            if (!AllowsHorizontalMovement)
+            if (!AllowsAttackMovement)
                 Boss.Movement?.StopHorizontal();
         }
 
         protected virtual void HandleAttackCast() { }
+
+        private void HandleAttackAnimationEnd()
+        {
+            OnAttackAnimationFinished();
+            HasAttackAnimationEnded = true;
+        }
+
+        protected virtual void OnAttackAnimationFinished() { }
 
         protected void ReturnToChase()
         {
@@ -52,6 +67,8 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
     public class GuardBossBasicAttackState : GuardBossAttackState
     {
         private bool _didAttack;
+        private bool _hitTarget;
+        private bool _forceMiss;
 
         public GuardBossBasicAttackState(GuardBoss boss) : base(boss) { }
 
@@ -59,6 +76,8 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
         {
             base.Enter(endAction);
             _didAttack = false;
+            _hitTarget = false;
+            _forceMiss = Combat != null && Combat.ShouldIntentionallyMissBasic();
             Combat?.StartCooldown(GuardBossCombatComponent.AttackPattern.Basic);
             Boss.BossAnimation?.PlayBasicAttack();
         }
@@ -69,8 +88,11 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 return;
 
             _didAttack = true;
-            Combat.AttackTarget(Combat.AttackRadius);
+            _hitTarget = Combat.AttackTarget(Combat.AttackRadius, _forceMiss);
         }
+
+        protected override void OnAttackAnimationFinished()
+            => Combat?.OnAttackFinished(GuardBossCombatComponent.AttackPattern.Basic, _hitTarget);
 
         public override void Update()
         {
@@ -81,10 +103,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 return;
             }
 
-            if (!_didAttack && StateTimer >= Combat.BasicWindup)
-                HandleAttackCast();
-
-            if (StateTimer >= Combat.BasicWindup + Combat.BasicRecovery)
+            if (HasAttackAnimationEnded && !Boss.IsVulnerable)
                 ReturnToChase();
         }
     }
@@ -92,8 +111,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
     public class GuardBossComboAttackState : GuardBossAttackState
     {
         private int _hitCount;
-        private float _nextHitTime;
-        private float _lastHitTime;
+        private bool _lastHitTarget;
 
         public GuardBossComboAttackState(GuardBoss boss) : base(boss) { }
 
@@ -101,8 +119,8 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
         {
             base.Enter(endAction);
             _hitCount = 0;
-            _nextHitTime = Combat != null ? Combat.ComboFirstWindup : 0f;
-            _lastHitTime = 0f;
+            _lastHitTarget = false;
+            Combat?.PrepareCombo();
             Combat?.StartCooldown(GuardBossCombatComponent.AttackPattern.Combo);
             Boss.BossAnimation?.PlayComboAttack();
         }
@@ -116,10 +134,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 return;
             }
 
-            if (_hitCount < 3 && StateTimer >= _nextHitTime)
-                HandleAttackCast();
-
-            if (_hitCount >= 3 && StateTimer >= _lastHitTime + Combat.ComboRecovery)
+            if (HasAttackAnimationEnded && !Boss.IsVulnerable)
                 ReturnToChase();
         }
 
@@ -128,16 +143,26 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
             if (Combat == null || _hitCount >= 3)
                 return;
 
-            Combat.AttackTarget(Combat.AttackRadius);
+            _lastHitTarget = Combat.AttackTarget(Combat.AttackRadius);
             _hitCount++;
-            _lastHitTime = StateTimer;
-            _nextHitTime += Combat.ComboHitInterval;
+            if (Combat.TryStopComboAfterHit(_hitCount))
+            {
+                Boss.BossAnimation?.PlayIdle();
+                return;
+            }
+        }
+
+        protected override void OnAttackAnimationFinished()
+        {
+            Combat?.CompleteCombo();
+            Combat?.OnAttackFinished(GuardBossCombatComponent.AttackPattern.Combo, _lastHitTarget);
         }
     }
 
     public class GuardBossHeavyAttackState : GuardBossAttackState
     {
         private bool _didAttack;
+        private bool _hitTarget;
 
         public GuardBossHeavyAttackState(GuardBoss boss) : base(boss) { }
 
@@ -145,6 +170,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
         {
             base.Enter(endAction);
             _didAttack = false;
+            _hitTarget = false;
             Combat?.StartCooldown(GuardBossCombatComponent.AttackPattern.Heavy);
             Boss.BossAnimation?.PlayHeavyCharge();
         }
@@ -155,8 +181,11 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 return;
 
             _didAttack = true;
-            Combat.AttackTarget(Combat.HeavyAttackRadius);
+            _hitTarget = Combat.AttackTarget(Combat.HeavyAttackRadius);
         }
+
+        protected override void OnAttackAnimationFinished()
+            => Combat?.OnAttackFinished(GuardBossCombatComponent.AttackPattern.Heavy, _hitTarget);
 
         public override void Update()
         {
@@ -167,10 +196,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 return;
             }
 
-            if (!_didAttack && StateTimer >= Combat.HeavyChargeTime)
-                HandleAttackCast();
-
-            if (StateTimer >= Combat.HeavyChargeTime + Combat.HeavyRecovery)
+            if (HasAttackAnimationEnded && !Boss.IsVulnerable)
                 ReturnToChase();
         }
     }
@@ -179,8 +205,6 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
     {
         private bool _launched;
         private int _hitCount;
-        private float _nextHitTime;
-        private float _lastHitTime;
 
         public GuardBossAirComboState(GuardBoss boss) : base(boss) { }
 
@@ -189,11 +213,10 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
             base.Enter(endAction);
             _launched = !Boss.IsGrounded;
             _hitCount = 0;
-            _lastHitTime = 0f;
             Combat?.StartCooldown(GuardBossCombatComponent.AttackPattern.AirCombo);
             if (_launched)
             {
-                _nextHitTime = Combat != null ? Combat.AirComboFirstWindup : 0f;
+                Boss.Movement?.BeginJumpAttackLift();
                 Boss.BossAnimation?.PlayAirCombo();
             }
             else
@@ -218,24 +241,30 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 {
                     _launched = true;
                     Boss.Movement.Jump();
+                    Boss.Movement.BeginJumpAttackLift();
                     StateTimer = 0f;
-                    _nextHitTime = Combat.AirComboFirstWindup;
-                    _lastHitTime = 0f;
                     Boss.BossAnimation?.PlayAirCombo();
                 }
                 return;
             }
 
-            if (_hitCount < 3 && StateTimer >= _nextHitTime)
-            {
-                Combat.AttackTarget(Combat.AttackRadius);
-                _hitCount++;
-                _lastHitTime = StateTimer;
-                _nextHitTime += Combat.AirComboHitInterval;
-            }
-
-            if (_hitCount >= 3 && StateTimer >= _lastHitTime + Combat.AirComboRecovery)
+            if (HasAttackAnimationEnded && !Boss.IsVulnerable)
                 ReturnToChase();
+        }
+
+        protected override void HandleAttackCast()
+        {
+            if (Combat == null || _hitCount >= 3)
+                return;
+
+            Combat.AttackTarget(Combat.AttackRadius);
+            _hitCount++;
+        }
+
+        public override void Exit()
+        {
+            Boss.Movement?.SuspendGravity(false);
+            base.Exit();
         }
     }
 
@@ -243,8 +272,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
     {
         private bool _launched;
         private bool _didHit;
-        protected override bool AllowsHorizontalMovement =>
-            _launched && Combat != null && StateTimer < Combat.AirDashDuration;
+        protected override bool AllowsAttackMovement => _launched && !HasAttackAnimationEnded;
 
         public GuardBossAirDashAttackState(GuardBoss boss) : base(boss) { }
 
@@ -258,6 +286,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
             {
                 if (Combat != null)
                     Boss.Movement?.StartAirAttackDash(Combat.AirDashSpeed);
+                Boss.Movement?.SuspendGravity(true);
                 Boss.BossAnimation?.PlayDash();
             }
             else
@@ -283,18 +312,15 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                     _launched = true;
                     Boss.Movement.Jump();
                     Boss.Movement.StartAirAttackDash(Combat.AirDashSpeed);
+                    Boss.Movement.SuspendGravity(true);
                     StateTimer = 0f;
                     Boss.BossAnimation?.PlayDash();
                 }
                 return;
             }
 
-            if (!_didHit && StateTimer >= Combat.AirDashHitDelay)
-                HandleAttackCast();
-
-            if (StateTimer >= Combat.AirDashDuration)
+            if (HasAttackAnimationEnded)
             {
-                Boss.Movement.StopHorizontal();
                 ReturnToChase();
             }
         }
@@ -305,6 +331,12 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 return;
 
             _didHit = Combat.AttackTarget(Combat.AttackRadius);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            Boss.Movement?.SuspendGravity(false);
         }
 
     }

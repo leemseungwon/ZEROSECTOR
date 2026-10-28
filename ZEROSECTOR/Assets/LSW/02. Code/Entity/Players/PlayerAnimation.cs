@@ -6,6 +6,9 @@ namespace LSW._02._Code.Entity.Players
 {
     public class PlayerAnimation : EntityAnimation
     {
+        private static readonly int DashAttackStateHash =
+            Animator.StringToHash("Player Dash Attack Animation");
+
         [Header("Animation Data List")]
         [field:SerializeField] public AnimationData JumpAnimationData { get; private set; }
         [field:SerializeField] public AnimationData FallAnimationData { get; private set; }
@@ -24,6 +27,21 @@ namespace LSW._02._Code.Entity.Players
         public event Action OnAttackAnimationEnd;
         public event Action OnGunCast;
         public event Action OnGunAnimationEnd;
+
+        public bool IsDashAttackAnimationPlaying
+        {
+            get
+            {
+                if (Animator == null)
+                    return false;
+
+                if (Animator.GetCurrentAnimatorStateInfo(0).shortNameHash == DashAttackStateHash)
+                    return true;
+
+                return Animator.IsInTransition(0) &&
+                       Animator.GetNextAnimatorStateInfo(0).shortNameHash == DashAttackStateHash;
+            }
+        }
 
         public void PlayDash(bool hitEnemy)
         {

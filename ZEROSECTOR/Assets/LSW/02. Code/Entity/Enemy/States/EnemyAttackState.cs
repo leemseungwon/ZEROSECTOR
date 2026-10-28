@@ -19,7 +19,6 @@ namespace LSW._02._Code.Entity.Enemy.States
             base.Enter(endAction);
             _attackCast = false;
             _enemy.StopHorizontalMovement();
-            _enemy.FaceTarget();
             if (_animation != null)
                 _animation.OnAttackCast += AttackCast;
             _enemy.PlayAttackAnimation();

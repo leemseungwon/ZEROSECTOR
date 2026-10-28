@@ -7,6 +7,8 @@ namespace LSW._02._Code.Entity.Boss
     public class BaseBoss : BaseEntity, IPoolable
     {
         public int CurrentHealthCount { get; set; }
+        public int MaxHealth => MaxHealthCount;
+        public virtual float MaxInvincibilityDuration => 1f;
 
         protected int MaxHealthCount => BossStatData != null
             ? Mathf.Max(1, BossStatData.healthCount)

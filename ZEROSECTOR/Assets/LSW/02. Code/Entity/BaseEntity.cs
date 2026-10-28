@@ -22,10 +22,12 @@ namespace LSW._02._Code.Entity
         public float CurrentMoveSpeed { get; private set; }
         public bool IsDead { get; protected set; }
 
+        [Header("Knockback")]
+        [SerializeField, Min(0.01f)] private float knockbackDuration = 0.2f;
+
         private Rigidbody2D _rigidbody;
         private float _baseMoveSpeed;
         private Coroutine _knockbackCoroutine;
-        private const float KnockbackDuration = 0.05f;
 
         public event Action<BaseEntity> OnDeathEvent;
         public event Action<BaseEntity> OnKilledBy;
@@ -131,13 +133,14 @@ namespace LSW._02._Code.Entity
             Vector2 targetPosition =
                 startPosition + direction * knockbackPower;
 
+            float duration = Mathf.Max(0.01f, knockbackDuration);
             float elapsed = 0f;
 
-            while (elapsed < KnockbackDuration)
+            while (elapsed < duration)
             {
                 elapsed += Time.fixedDeltaTime;
 
-                float t = Mathf.Clamp01(elapsed / KnockbackDuration);
+                float t = Mathf.Clamp01(elapsed / duration);
 
                 Rigidbody.MovePosition(
                     Vector2.Lerp(startPosition, targetPosition, t)

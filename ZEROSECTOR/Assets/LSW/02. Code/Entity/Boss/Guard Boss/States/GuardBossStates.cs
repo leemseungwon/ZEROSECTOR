@@ -1,5 +1,6 @@
 using System;
 using LSW._02._Code.Entity.Boss.Guard_Boss.Components;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
@@ -34,15 +35,31 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
         public override void Enter(Action endAction = null)
         {
             base.Enter(endAction);
-            _nextPatternDecisionTime = Random.Range(0.12f, 0.22f);
+            _nextPatternDecisionTime = _boss.CurrentPhase == 1 && _boss.Combat != null
+                ? _boss.Combat.PhaseOnePatternInterval
+                : Random.Range(0.12f, 0.22f);
         }
 
         public override void Update()
         {
             base.Update();
+            if (_boss.IsVulnerable)
+            {
+                _boss.StateMachine.ChangeState(GuardBoss.VulnerableState);
+                return;
+            }
+
             if (!_boss.HasLivingTarget())
             {
                 _boss.StateMachine.ChangeState(GuardBoss.IdleState);
+                return;
+            }
+
+            // Air dash and aerial attack states can finish before the boss lands.
+            // Keep the state machine aligned with the airborne animation/physics.
+            if (_boss.Movement != null && !_boss.Movement.IsGrounded)
+            {
+                _boss.StateMachine.ChangeState(GuardBoss.AirborneState);
                 return;
             }
 
@@ -54,46 +71,54 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
 
             if (StateTimer < _nextPatternDecisionTime)
                 return;
-            _nextPatternDecisionTime = StateTimer + Random.Range(0.25f, 0.4f);
+            _nextPatternDecisionTime = StateTimer + (_boss.CurrentPhase == 1
+                ? combat.PhaseOnePatternInterval
+                : Random.Range(0.25f, 0.4f));
 
             float distance = _boss.DistanceToTarget();
-            if (movement.IsGrounded && movement.CanJump && distance <= combat.AttackRange &&
-                combat.TryChooseAirAttack(out GuardBossCombatComponent.AttackPattern closeAirAttack) &&
-                Random.value < 0.1f)
+            float horizontalDistance = Mathf.Abs(
+                _boss.TargetPlayer.transform.position.x - _boss.transform.position.x);
+            float targetHeight = movement.HeightDifferenceTo(_boss.TargetPlayer.transform);
+            bool playerIsGrounded = _boss.TargetPlayer.IsGrounded;
+            bool playerIsAirborneAbove = !playerIsGrounded &&
+                                         targetHeight >= movement.JumpTargetHeightThreshold;
+            bool playerIsOnElevatedPlatform = playerIsGrounded &&
+                                              targetHeight >= movement.ElevatedPlatformHeightThreshold;
+            bool targetIsReachableByJump = movement.CanJumpToHeight(targetHeight);
+
+            if (_boss.CurrentPhase > 1 && movement.IsGrounded && movement.CanJump && targetIsReachableByJump &&
+                (playerIsAirborneAbove || playerIsOnElevatedPlatform))
             {
-                _boss.StateMachine.ChangeState(GetAttackState(closeAirAttack));
+                _boss.StateMachine.ChangeState(GuardBoss.JumpState);
                 return;
             }
 
-            if (movement.IsGrounded && distance <= combat.AttackRange &&
+            bool waitingBelowUnreachablePlatform = targetHeight > movement.MaxJumpReachHeight &&
+                                                    horizontalDistance < movement.ApproachDashTriggerDistance;
+
+            if (!waitingBelowUnreachablePlatform && movement.IsGrounded && distance <= combat.AttackRange &&
                 combat.TryChooseGroundAttack(out GuardBossCombatComponent.AttackPattern groundAttack))
             {
                 _boss.StateMachine.ChangeState(GetAttackState(groundAttack));
                 return;
             }
 
-            if (movement.IsGrounded && distance <= movement.EvadeDistance && movement.CanEvadeDash &&
+            if (_boss.CurrentPhase > 1 && !waitingBelowUnreachablePlatform && movement.IsGrounded &&
+                distance <= movement.EvadeDistance && movement.CanEvadeDash &&
                 Random.value < 0.12f)
             {
                 _boss.StateMachine.ChangeState(GuardBoss.EvadeDashState);
                 return;
             }
 
-            if (movement.IsGrounded && distance > combat.AttackRange * 1.5f &&
-                movement.CanApproachDash && Random.value < 0.28f)
+            if (!waitingBelowUnreachablePlatform && movement.IsGrounded &&
+                distance >= movement.ApproachDashTriggerDistance && movement.CanApproachDash)
             {
                 _boss.StateMachine.ChangeState(GuardBoss.ApproachDashState);
                 return;
             }
 
-            if (movement.IsGrounded && movement.CanJump && distance > combat.AttackRange &&
-                Random.value < 0.12f)
-            {
-                _boss.StateMachine.ChangeState(GuardBoss.JumpState);
-                return;
-            }
-
-            if (!movement.IsGrounded && movement.CanAirEvadeDash &&
+            if (_boss.CurrentPhase > 1 && !movement.IsGrounded && movement.CanAirEvadeDash &&
                 distance <= movement.EvadeDistance && Random.value < 0.1f)
             {
                 _boss.StateMachine.ChangeState(GuardBoss.AirEvadeDashState);
@@ -152,7 +177,6 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
             {
                 _jumped = true;
                 _boss.Movement.Jump();
-                _boss.BossAnimation?.PlayJump();
                 _boss.StateMachine.ChangeState(GuardBoss.AirborneState);
             }
         }
@@ -162,6 +186,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
     {
         private readonly GuardBoss _boss;
         private float _nextPatternDecisionTime;
+        private bool _fallAnimationPlayed;
 
         public GuardBossAirborneState(GuardBoss boss) : base(boss) => _boss = boss;
 
@@ -169,14 +194,30 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
         {
             base.Enter(endAction);
             _nextPatternDecisionTime = Random.Range(0.16f, 0.26f);
+            _fallAnimationPlayed = false;
             _boss.BossAnimation?.SetMoving(false);
-            _boss.BossAnimation?.PlayJump();
+            if (_boss.Movement != null && _boss.Movement.VerticalVelocity > 0.01f)
+                _boss.BossAnimation?.PlayJump();
+            else
+            {
+                _fallAnimationPlayed = true;
+                _boss.BossAnimation?.PlayFall();
+            }
         }
 
         public override void Update()
         {
             base.Update();
-            if (!_boss.HasLivingTarget() || _boss.Movement == null || _boss.Combat == null)
+            if (_boss.Movement == null)
+                return;
+
+            if (!_fallAnimationPlayed && _boss.Movement.VerticalVelocity <= 0.01f)
+            {
+                _fallAnimationPlayed = true;
+                _boss.BossAnimation?.PlayFall();
+            }
+
+            if (!_boss.HasLivingTarget() || _boss.Combat == null)
                 return;
 
             if (StateTimer < _nextPatternDecisionTime)
@@ -184,8 +225,8 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
             _nextPatternDecisionTime = StateTimer + Random.Range(0.25f, 0.4f);
 
             _boss.FaceTarget();
-            if (_boss.Combat.TryChooseAirAttack(out GuardBossCombatComponent.AttackPattern airAttack) &&
-                Random.value < 0.12f)
+            if (_boss.DistanceToTarget() <= _boss.Combat.AttackRange &&
+                _boss.Combat.TryChooseAirAttack(out GuardBossCombatComponent.AttackPattern airAttack))
             {
                 _boss.StateMachine.ChangeState(airAttack == GuardBossCombatComponent.AttackPattern.AirCombo
                     ? GuardBoss.AirComboState
@@ -193,7 +234,7 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
                 return;
             }
 
-            if (_boss.Movement.CanAirEvadeDash &&
+            if (_boss.CurrentPhase > 1 && _boss.Movement.CanAirEvadeDash &&
                 _boss.DistanceToTarget() <= _boss.Movement.EvadeDistance && Random.value < 0.1f)
                 _boss.StateMachine.ChangeState(GuardBoss.AirEvadeDashState);
         }
@@ -299,6 +340,37 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
             _despawned = true;
             _boss.BossAnimation.OnDead -= HandleDeathAnimationEnd;
             _boss.gameObject.SetActive(false);
+        }
+    }
+
+    public class GuardBossVulnerableState : EntityState
+    {
+        private readonly GuardBoss _boss;
+
+        public GuardBossVulnerableState(GuardBoss boss) : base(boss) => _boss = boss;
+
+        public override void Enter(Action endAction = null)
+        {
+            base.Enter(endAction);
+            _boss.Movement?.StopHorizontal();
+            _boss.BossAnimation?.SetMoving(false);
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (_boss.IsDead || _boss.IsVulnerable)
+                return;
+
+            _boss.StateMachine.ChangeState(_boss.HasLivingTarget()
+                ? GuardBoss.ChaseState
+                : GuardBoss.IdleState);
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            _boss.Movement?.StopHorizontal();
         }
     }
 }

@@ -166,15 +166,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Entity.Enemy.MeleeEnemy
   <StatData>k__BackingField: {fileID: 11400000, guid: 74200ba9cae6aa2438b92a4e29eccfc2, type: 2}
+  knockbackDuration: 0.2
   detectionRange: 8
   attackRange: 0.8
   wallLayers:
     serializedVersion: 2
     m_Bits: 65
-  patrolWhenIdle: 0
-  patrolDistance: 2
-  idleDuration: 0.5
-  attackCooldown: 3
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  ledgeCheckForward: 0.08
+  ledgeProbeDistance: 0.35
+  attackCooldown: 1
   attackHitRadius: 0.55
   attackHitOffset: {x: 0.35, y: 0.46}
   attackHitLayers:

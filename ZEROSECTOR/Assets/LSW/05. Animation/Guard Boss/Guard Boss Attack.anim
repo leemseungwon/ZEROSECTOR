@@ -22,13 +22,13 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 2886317615879600216, guid: 43de8cd49239d3b4f8d70cb44d30ee14, type: 3}
-    - time: 0.19
+    - time: 0.05
       value: {fileID: 2886317615879600216, guid: 43de8cd49239d3b4f8d70cb44d30ee14, type: 3}
-    - time: 0.28
+    - time: 0.39
       value: {fileID: 2717814795298666262, guid: 43de8cd49239d3b4f8d70cb44d30ee14, type: 3}
-    - time: 0.35
+    - time: 0.46
       value: {fileID: 378336991480134404, guid: 43de8cd49239d3b4f8d70cb44d30ee14, type: 3}
-    - time: 0.44
+    - time: 0.55
       value: {fileID: -7488128108373442474, guid: 43de8cd49239d3b4f8d70cb44d30ee14, type: 3}
     attribute: m_Sprite
     path: 
@@ -63,7 +63,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.45
+    m_StopTime: 0.56
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -83,8 +83,15 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.28
+  - time: 0.4
     functionName: AttackCast
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.55
+    functionName: AttackAnimationEnd
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

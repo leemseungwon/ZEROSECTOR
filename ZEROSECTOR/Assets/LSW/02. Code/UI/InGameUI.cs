@@ -1,7 +1,9 @@
 
 using System.Collections.Generic;
+using LSW._02._Code.Entity.Boss;
 using LSW._02._Code.Entity.Enemy;
 using LSW._02._Code.Entity.Players;
+using LSW._02._Code.Environments;
 using LSW._02._Code.System;
 using LSW._02._Code.System.HandlePlayerSystems;
 using LSW._02._Code.System.PoolSystems;
@@ -19,11 +21,16 @@ namespace LSW._02._Code.UI
         [SerializeField] private string enemyArrowPoolName;
         [SerializeField] private Camera targetCamera;
 
+        [Header("Boss Status UI" )]
+        [SerializeField] private BossStatusUI bossStatusUI;
+        
         private PlayerController _player;
         private PoolSystem _poolSystem;
         private Canvas _canvas;
         private bool _isBound;
         private readonly Dictionary<BaseEnemy, EnemyDirectionArrowUI> _enemyArrows = new();
+        private BossRoom _bossRoom;
+        private BaseBoss _trackedBoss;
 
         private void Start()
         {
@@ -36,6 +43,64 @@ namespace LSW._02._Code.UI
         {
             if (!_isBound)
                 BindPlayer();
+
+            UpdateBossRoomBinding();
+        }
+
+        private void UpdateBossRoomBinding()
+        {
+            BossRoom activeRoom = BossRoom.ActiveRoom;
+            if (activeRoom != _bossRoom)
+            {
+                UnbindBossRoom();
+                _bossRoom = activeRoom;
+                if (_bossRoom != null)
+                {
+                    _bossRoom.OnRoomReset += HandleBossRoomReset;
+                    _bossRoom.OnRoomCleared += HideBossStatus;
+                    _bossRoom.OnRoomDeactivated += HideBossStatus;
+                }
+            }
+
+            if (_bossRoom != null && _bossRoom.SpawnedBoss != _trackedBoss)
+                BindBoss(_bossRoom.SpawnedBoss);
+        }
+
+        private void HandleBossRoomReset()
+        {
+            BindBoss(_bossRoom != null ? _bossRoom.SpawnedBoss : null);
+        }
+
+        private void BindBoss(BaseBoss boss)
+        {
+            _trackedBoss = boss;
+            if (_trackedBoss == null || _trackedBoss.IsDead || !_trackedBoss.gameObject.activeInHierarchy)
+                bossStatusUI?.Hide();
+            else
+                bossStatusUI?.ShowBoss(_trackedBoss);
+        }
+
+        private void HideBossStatus()
+        {
+            bossStatusUI?.Hide();
+        }
+
+        private void UnbindBossRoom()
+        {
+            if (_bossRoom != null)
+            {
+                _bossRoom.OnRoomReset -= HandleBossRoomReset;
+                _bossRoom.OnRoomCleared -= HideBossStatus;
+                _bossRoom.OnRoomDeactivated -= HideBossStatus;
+            }
+
+            _trackedBoss = null;
+            HideBossStatus();
+        }
+
+        private void OnDestroy()
+        {
+            UnbindBossRoom();
         }
 
         private void BindPlayer()

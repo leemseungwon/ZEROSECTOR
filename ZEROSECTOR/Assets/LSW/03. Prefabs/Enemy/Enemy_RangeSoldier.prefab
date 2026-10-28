@@ -166,17 +166,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Entity.Enemy.RangedEnemy
   <StatData>k__BackingField: {fileID: 11400000, guid: 13c1d5b6ae5393b49b43b480e6d71495, type: 2}
+  knockbackDuration: 0.2
   detectionRange: 6
-  attackRange: 1
+  attackRange: 5
   wallLayers:
     serializedVersion: 2
+    m_Bits: 64
+  groundLayers:
+    serializedVersion: 2
     m_Bits: 65
-  patrolWhenIdle: 1
-  patrolDistance: 2
-  idleDuration: 0.5
+  ledgeCheckForward: 0.08
+  ledgeProbeDistance: 0.35
   attackCooldown: 1
-  projectilePoolName: Enemy_NormalSoldier
-  projectileSpeed: 8
+  projectilePoolName: Projectile_NormalSoldier
+  projectileSpeed: 15
   projectileLifetime: 4
   firePoint: {fileID: 3816910752014985574}
   fallbackFireOffset: {x: 0.7, y: 0.25}

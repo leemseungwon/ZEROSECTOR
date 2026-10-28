@@ -122,13 +122,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Entity.Boss.Guard_Boss.GuardBoss
   <StatData>k__BackingField: {fileID: 11400000, guid: f4b6f9813e4d0d84d8485b335e1774d2, type: 2}
+  knockbackDuration: 0.2
   landingDuration: 0.35
   hitStunDuration: 0.12
-  hitKnockback: 4
+  hitKnockback: 0.2
   deathFallbackDuration: 2
+  invincibilityDuration: 30
   jumpInvincibilityDuration: 0.7
   dashInvincibilityDuration: 0.45
-  hitInvincibilityDuration: 0.65
+  minionPoolName:
+  - Enemy_RangeSoldier
+  - Enemy_MeleeSoldier
+  minionSpawnPoint: {fileID: 4294181087550940545}
+  maxMinionSpawnCount: 3
+  minionSpawnOffset: {x: 0.8, y: 1.5}
+  minionSpawnCooldown: 6
+--- !u!1 &1491667120967473859
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4294181087550940545}
+  m_Layer: 8
+  m_Name: Minion Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4294181087550940545
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1491667120967473859}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.46, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4359818135057991656}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1758519225788775336
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,12 +252,23 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
-  runSpeed: 4
+  airDashCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  ledgeCheckForward: 0.08
+  ledgeProbeDistance: 0.35
+  maxWalkableSlopeAngle: 55
   gravity: 22
   maxFallSpeed: 22
   jumpForce: 11
   jumpPreparation: 0.3
   jumpCooldown: 3
+  jumpTargetHeightThreshold: 0.35
+  elevatedPlatformHeightThreshold: 0.35
+  jumpReachSafetyMargin: 0.2
+  jumpAttackLiftDuration: 0.12
+  chasePositionCorrection: 18
+  approachDashTriggerDistance: 5
   approachDashSpeed: 12
   approachDashDuration: 0.28
   approachDashCooldown: 4
@@ -281,27 +331,31 @@ MonoBehaviour:
   attackRadius: 1.4
   attackOffset: {x: 1.1, y: 0.4}
   heavyAttackRadius: 2.2
-  basicWindup: 0.3
-  basicRecovery: 0.15
   basicCooldown: 2
-  comboFirstWindup: 0.12
-  comboHitInterval: 0.32
-  comboRecovery: 0.23
   comboCooldown: 4
-  heavyChargeTime: 0.62
-  heavyRecovery: 0.25
   heavyCooldown: 6
   airComboPreparation: 0.3
-  airComboFirstWindup: 0.14
-  airComboHitInterval: 0.22
-  airComboRecovery: 0.25
   airComboCooldown: 10
   airDashPreparation: 0.24
   airDashSpeed: 12
-  airDashDuration: 0.28
-  airDashHitDelay: 0.18
   airDashCooldown: 6
   postAttackRecovery: 0.65
+  basicVulnerabilityMin: 0.6
+  basicVulnerabilityMax: 0.8
+  comboVulnerabilityMin: 1
+  comboVulnerabilityMax: 1.3
+  slamVulnerabilityMin: 1.5
+  slamVulnerabilityMax: 2
+  phaseTransitionFreezeDuration: 0.5
+  phaseOnePatternInterval: 1.25
+  phaseTwoComboStopChance: 0.35
+  phaseTwoMaxCombosWithoutStop: 3
+  phaseTwoComboStopVulnerability: 1
+  phaseTwoIntentionalMissChance: 0.25
+  phaseTwoIntentionalMissOffset: 3
+  phaseTwoMinionIntervalMin: 8
+  phaseTwoMinionIntervalMax: 14
+  phaseTwoWallHitVulnerability: 1.1
 --- !u!1 &3175843201922563705
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +421,7 @@ Transform:
   m_Children:
   - {fileID: 2096909270496521570}
   - {fileID: 2892960152187990368}
+  - {fileID: 4294181087550940545}
   m_Father: {fileID: 3628872152571193474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6866715270785475827
@@ -473,6 +528,9 @@ MonoBehaviour:
   airComboAnimation: {fileID: 11400000, guid: 4efead3fe08614049b84d70757db9d5e, type: 2}
   dashAnimation: {fileID: 11400000, guid: 3c806ab563d34ea6ab675761a2a05d3f, type: 2}
   hitAnimation: {fileID: 11400000, guid: 85a7ca81e0638d84e9e2ac05dbdaa08c, type: 2}
+  normalGray: 0.65
+  vulnerableGray: 1
+  finalPhaseSpeed: 1.25
 --- !u!1 &4054793045367287953
 GameObject:
   m_ObjectHideFlags: 0

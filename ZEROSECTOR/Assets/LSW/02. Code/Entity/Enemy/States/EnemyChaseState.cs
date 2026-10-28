@@ -22,13 +22,13 @@ namespace LSW._02._Code.Entity.Enemy.States
                 return;
             }
 
+            _enemy.FaceTarget();
+
             if (_enemy.DistanceToTarget() <= _enemy.AttackRange)
             {
                 _enemy.StateMachine.ChangeState(BaseEnemy.AttackState);
                 return;
             }
-
-            _enemy.FaceTarget();
         }
 
         public override void FixedUpdate()

@@ -75,11 +75,17 @@ namespace LSW._02._Code.Entity.Boss.Guard_Boss.States
             base.Update();
             if (_boss.Movement == null || StateTimer >= _boss.Movement.AirEvadeDashDuration)
             {
-                _boss.Movement?.StopHorizontal();
+                _boss.Movement?.EndAirDash();
                 _boss.StateMachine.ChangeState(_boss.HasLivingTarget()
                     ? GuardBoss.ChaseState
                     : GuardBoss.IdleState);
             }
+        }
+
+        public override void Exit()
+        {
+            _boss.Movement?.EndAirDash();
+            base.Exit();
         }
     }
 }
