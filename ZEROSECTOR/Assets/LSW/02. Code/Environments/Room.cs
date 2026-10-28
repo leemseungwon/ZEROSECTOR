@@ -30,6 +30,7 @@ namespace LSW._02._Code.Environments
         [SerializeField] private Transform playerRespawnPoint;
         [SerializeField] private EnemySpawn[] enemies;
         [SerializeField] private RoomDoor roomDoor;
+        [SerializeField] private RoomDoor prevDoor;
 
         private readonly List<BaseEnemy> _spawnedEnemies = new();
         private PlayerController _player;
@@ -109,6 +110,9 @@ namespace LSW._02._Code.Environments
 
             if (ActiveRoom != null)
                 ActiveRoom.Deactivate();
+            
+            if(prevDoor != null)
+                prevDoor.CloseDoor();
 
             ActiveRoom = this;
             _player = player;

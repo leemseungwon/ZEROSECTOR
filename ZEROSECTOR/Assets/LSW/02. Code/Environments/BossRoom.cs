@@ -19,6 +19,7 @@ namespace LSW._02._Code.Environments
         [SerializeField] private string bossPoolName = "Boss_Guard";
         [SerializeField] private Transform bossSpawnPoint;
         [SerializeField] private RoomDoor roomDoor;
+        [SerializeField] private RoomDoor prevDoor;
 
         private PlayerController _player;
         private BaseBoss _spawnedBoss;
@@ -93,6 +94,9 @@ namespace LSW._02._Code.Environments
 
             if (ActiveRoom != null)
                 ActiveRoom.Deactivate();
+            
+            if(prevDoor != null)
+                prevDoor.CloseDoor();
 
             ActiveRoom = this;
             _player = player;

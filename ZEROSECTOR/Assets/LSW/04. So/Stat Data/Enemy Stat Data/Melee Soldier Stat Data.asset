@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea637b67cb649ca9ce8aaec9b7b75c7, type: 3}
   m_Name: Melee Soldier Stat Data
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Sos.EntityStatDatas.EnemyStatData
-  initMoveSpeed: 1
+  initMoveSpeed: 4
   poolName: Enemy_MeleeSoldier

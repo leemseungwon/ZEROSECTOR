@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34c5735ece64d2794d5cda9a2790717, type: 3}
   m_Name: Guard Boss Stat Data
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Sos.EntityStatDatas.BossStatData
-  initMoveSpeed: 10
+  initMoveSpeed: 12
   poolName: Boss_Guard
   healthCount: 8

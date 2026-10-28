@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ea637b67cb649ca9ce8aaec9b7b75c7, type: 3}
   m_Name: Range Soldier Stat Data
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Sos.EntityStatDatas.EnemyStatData
-  initMoveSpeed: 1
+  initMoveSpeed: 3
   poolName: Enemy_RangeSoldier
