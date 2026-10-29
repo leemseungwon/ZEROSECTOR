@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a9f0bc721a74914bcde41a508cb759e, type: 3}
   m_Name: Gun Weapon
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Sos.WeaponData
-  displayName: Gun
   weaponType: 1
   attackRadius: 1
-  range: 30
   attackCooldown: 0
   selfKnockbackPower: 1
