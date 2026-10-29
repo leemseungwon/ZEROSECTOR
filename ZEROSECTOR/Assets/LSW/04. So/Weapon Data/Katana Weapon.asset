@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Katana Weapon
   m_EditorClassIdentifier: Assembly-CSharp::LSW._02._Code.Sos.WeaponData
   weaponType: 0
-  attackRadius: 0.5
-  attackCooldown: 0.5
+  attackRadius: 0.75
+  attackCooldown: 0.35
   selfKnockbackPower: 0
